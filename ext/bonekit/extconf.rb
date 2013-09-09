@@ -1,3 +1,3 @@
 require 'mkmf'
 
-create_makefile("bonekit")
+create_makefile('bonekit/bonekit')
