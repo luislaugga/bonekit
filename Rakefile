@@ -1,22 +1,17 @@
+require 'rubygems'
+require 'rake'
+require 'rake/extensiontask'
 require 'bundler'
-Bundler::GemHelper.install_tasks
 
-spec = eval File.read("bonekit.gemspec")
-
-if RUBY_PLATFORM =~ /java/
-  require 'rake/javaextensiontask'
-
-  Rake::JavaExtensionTask.new('msgpack', spec) do |ext|
-    ext.ext_dir = 'ext/java'
-  end
-
-else
-  require 'rake/extensiontask'
-
-  Rake::ExtensionTask.new('bonekit', spec) do |ext|
-    ext.cross_compile = true
-    ext.lib_dir = File.join(*['lib', 'bonekit', ENV['FAT_DIR']].compact)
-  end
+Rake::ExtensionTask.new("bonekit") do |extension|
+  extension.lib_dir = "lib/bonekit"
 end
+
+task :chmod do
+  File.chmod(0775, 'lib/bonekit/bonekit.so')
+end
+task :build => [:clean, :compile, :chmod]
+
+Bundler::GemHelper.install_tasks
 
 task :default => :build
