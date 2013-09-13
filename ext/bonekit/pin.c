@@ -2,8 +2,7 @@
 */
 
 #include "pin.h"
-
-#include <linux/gpio.h>
+#include "gpio.h"
 
 pin_t * pin_create(unsigned gpio)
 {
@@ -12,9 +11,6 @@ pin_t * pin_create(unsigned gpio)
   if(obj)
   {
     obj->_gpio = gpio;
-    
-    obj->_mode = 0;
-    gpio_direction_input(gpio);
   }
   
   return obj;
@@ -30,14 +26,15 @@ uint8_t pin_mode(pin_t * obj)
   return obj->_mode;
 }
 
-void pin_set_mode(pin_t * obj, uint8_t mode)
+void pin_set_mode(pin_t * obj, int mode)
 {
-  // ...
+  obj->_mode = mode;
+  gpio_set_direction(obj->_gpio, mode);
 }
 
 int pin_value(pin_t * obj)
 {
-	obj->_value = gpio_get_value(obj->_gpio);
+	gpio_get_value(obj->_gpio, &(obj->_value));
   return obj->value;
 }
 
