@@ -4,6 +4,8 @@
 #include "pin.h"
 #include "gpio.h"
 
+#include <stdlib.h>
+
 pin_t * pin_create(unsigned gpio)
 {
   pin_t * obj;
@@ -21,7 +23,7 @@ void pin_destroy(pin_t * obj)
   free(obj);
 }
 
-uint8_t pin_mode(pin_t * obj)
+int pin_mode(pin_t * obj)
 {
   return obj->_mode;
 }
@@ -35,7 +37,7 @@ void pin_set_mode(pin_t * obj, int mode)
 int pin_value(pin_t * obj)
 {
 	gpio_get_value(obj->_gpio, &(obj->_value));
-  return obj->value;
+  return obj->_value;
 }
 
 void pin_set_value(pin_t * obj, int value)
