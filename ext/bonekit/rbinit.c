@@ -30,6 +30,20 @@ static void class_pin_set_value(VALUE self, VALUE value)
   pin_set_value(ptr, NUM2INT(value));
 }
 
+static VALUE class_pin_mode(VALUE self)
+{
+  pin_t * ptr;
+  Data_Get_Struct(self, pin_t, ptr);
+  return INT2NUM(pin_mode(ptr));
+}
+
+static void class_pin_set_mode(VALUE self, VALUE value)
+{
+  pin_t * ptr;
+  Data_Get_Struct(self, pin_t, ptr);
+  pin_set_mode(ptr, NUM2INT(value));
+}
+
 void Bonekit_Pin_class_init()
 {
   class_pin = rb_define_class("Pin", rb_cObject);
