@@ -1,5 +1,6 @@
 #include "ruby.h"
 #include "pin.h"
+#include "gpio.h"
 #include "hmc5883l.h"
 
 VALUE class_pin;
@@ -9,10 +10,21 @@ static void class_pin_free(void * ptr)
   pin_destroy(ptr);
 }
 
-VALUE class_pin_new(VALUE class, VALUE number)
+VALUE class_pin_new(int argc, VALUE* argv, VALUE self)
 {
-  pin_t * ptr = pin_create(NUM2UINT(number));
-  VALUE tdata = Data_Wrap_Struct(class, 0, class_pin_free, ptr);
+  if (argc > 2 || argc == 0)  // there should only be 1 or 2 arguments
+    rb_raise(rb_eArgError, "Wrong number of arguments");
+  
+  pin_t * ptr = pin_create(NUM2UINT(argv[0]));
+  
+  int mode = INPUT;
+  
+  if(argc == 2)
+    mode = NUM2INT(argv[1]);
+
+  pin_set_mode(ptr, mode);
+  
+  VALUE tdata = Data_Wrap_Struct(self, 0, class_pin_free, ptr);
   return tdata;
 }
 
@@ -47,11 +59,16 @@ static void class_pin_set_mode(VALUE self, VALUE value)
 void Bonekit_Pin_class_init()
 {
   class_pin = rb_define_class("Pin", rb_cObject);
-  rb_define_singleton_method(class_pin, "new", class_pin_new, 1);
+  rb_define_singleton_method(class_pin, "new", class_pin_new, -1); // Pin#new(number,mode=Input)
   rb_define_method(class_pin, "value", class_pin_value, 0);
   rb_define_method(class_pin, "value=", class_pin_set_value, 1);
   rb_define_method(class_pin, "mode", class_pin_mode, 0);
   rb_define_method(class_pin, "mode=", class_pin_set_mode, 1);
+  
+  rb_define_global_const("High", INT2NUM(HIGH));
+  rb_define_global_const("Low", INT2NUM(LOW));
+  rb_define_global_const("Input", INT2NUM(INPUT));
+  rb_define_global_const("Output", INT2NUM(OUTPUT));
 }
 
 VALUE class_hmc5883l;

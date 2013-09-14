@@ -8,6 +8,12 @@
 extern "C" {
 #endif
   
+#define INPUT  0
+#define OUTPUT 1
+
+#define HIGH 1
+#define LOW  0
+  
 int open_value_file(unsigned int);
 int gpio_export(unsigned int);
 int gpio_set_direction(unsigned int, unsigned int);
