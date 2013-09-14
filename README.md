@@ -40,13 +40,27 @@ pin.value = value # Write value
 pin.mode = Input # Set mode
 ```
 
-__Serial Communication__
-
-__I2C__
-
-__SPI__
-
 __Devices (ICs)__
 
-* HMC5883L
+```ruby
+compass = HMC5883L.new
+heading = compass.heading # degrees
+```
+
+## Roadmap
+
+* Digital Input/Output (in progress, with issues)
+* Analog Input/Output (planned)
+* Interrupts (planned)
+* Serial Communication (planned)
+* I2C (planned)
+* SPI (planned)
+* Devices:
+  * HMC5883L (implemented, with issues)
+  * ADXL345 (planned)
+  * ITG-3200 (planned) 
+  * TLC5940 (planned)
+* Other:
+  * Capacitive Sensor (planned)
+  * Resistive Pressure Sensor (planned) 
 
