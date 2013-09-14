@@ -6,6 +6,33 @@
 #include <unistd.h>
 #include <string.h>
 
+int open_value_file(unsigned int gpio)
+{
+    int fd;
+    char filename[40];
+
+    // create file descriptor of value file
+    snprintf(filename, sizeof(filename), "/sys/class/gpio/gpio%d/value", gpio);
+    if ((fd = open(filename, O_RDONLY | O_NONBLOCK)) < 0)
+        return -1;
+    return fd;
+}
+
+int gpio_export(unsigned int gpio)
+{
+    int fd, len;
+    char str_gpio[10];
+    struct gpio_exp *new_gpio, *g;
+
+    if ((fd = open("/sys/class/gpio/export", O_WRONLY)) < 0)
+    {
+        return -1;
+    }
+    len = snprintf(str_gpio, sizeof(str_gpio), "%d", gpio);
+    write(fd, str_gpio, len);
+    close(fd);
+}
+
 int gpio_set_direction(unsigned int gpio, unsigned int in_flag)
 {
         int fd;
@@ -51,7 +78,7 @@ int gpio_set_value(unsigned int gpio, unsigned int value)
 
 int gpio_get_value(unsigned int gpio, unsigned int *value)
 {
-    int fd = fd_lookup(gpio);
+    int fd = 0;
     char ch;
 
     if (!fd)

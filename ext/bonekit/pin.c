@@ -13,6 +13,7 @@ pin_t * pin_create(unsigned gpio)
   if(obj)
   {
     obj->_gpio = gpio;
+    gpio_export(gpio);
   }
   
   return obj;
