@@ -66,9 +66,9 @@ int gpio_set_value(unsigned int gpio, unsigned int value)
         return -1;
 
     if (value) {
-        strncpy(vstr, "1", 1);
+        strncpy(vstr, "1", 2);
     } else {
-        strncpy(vstr, "0", 1);
+        strncpy(vstr, "0", 2);
     }
 
     write(fd, vstr, strlen(vstr));

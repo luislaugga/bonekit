@@ -44,5 +44,5 @@ int pin_value(pin_t * obj)
 void pin_set_value(pin_t * obj, int value)
 {
   obj->_value = value;
-  gpio_set_value(obj->_gpio, obj->_value);
+  gpio_set_value(obj->_gpio, value);
 }
