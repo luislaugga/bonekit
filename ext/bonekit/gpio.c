@@ -35,23 +35,23 @@ int gpio_export(unsigned int gpio)
 
 int gpio_set_direction(unsigned int gpio, unsigned int in_flag)
 {
-        int fd;
-        char filename[40];
-        char direction[10] = { 0 };
+    int fd;
+    char filename[40];
+    char direction[10] = { 0 };
 
-        snprintf(filename, sizeof(filename), "/sys/class/gpio/gpio%d/direction", gpio);
-        if ((fd = open(filename, O_WRONLY)) < 0)
-            return -1;
+    snprintf(filename, sizeof(filename), "/sys/class/gpio/gpio%d/direction", gpio);
+    if ((fd = open(filename, O_WRONLY)) < 0)
+        return -1;
 
-        if (in_flag) {
-            strncpy(direction, "out", ARRAY_SIZE(direction) - 1);
-        } else {
-            strncpy(direction, "in", ARRAY_SIZE(direction) - 1);
-        }
+    if (in_flag) {
+        strncpy(direction, "out", 3);
+    } else {
+        strncpy(direction, "in", 2); // TODO fix remove 9 to strlen of similar
+    }
 
-        write(fd, direction, strlen(direction));
-        close(fd);
-        return 0;
+    write(fd, direction, strlen(direction));
+    close(fd);
+    return 0;
 }
 
 int gpio_set_value(unsigned int gpio, unsigned int value)
