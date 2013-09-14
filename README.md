@@ -28,14 +28,17 @@ gem install --local pkg/bonekit
 
 ## Reference
 
-__Pin digital Input/Output__
+__Pin Input/Output__
 
-* digitalRead()
-* digitalWrite()
+```ruby
+pin = Pin.new 30 # gpio = 30, mode = Input
+pin = Pin.new 30, Output # gpio = 30, mode = Output
 
-__Pin analog Input__
+value = pin.value # Read value
+pin.value = value # Write value
 
-__Pin PWM (analog) Output__
+pin.mode = Input # Set mode
+```
 
 __Serial Communication__
 
