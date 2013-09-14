@@ -21,6 +21,8 @@ pin_t * pin_create(unsigned gpio)
 
 void pin_destroy(pin_t * obj)
 {
+  pin_set_value(obj, 0);
+  pin_set_mode(obj, 0);
   free(obj);
 }
 
