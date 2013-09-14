@@ -36,6 +36,8 @@ void Bonekit_Pin_class_init()
   rb_define_singleton_method(class_pin, "new", class_pin_new, 1);
   rb_define_method(class_pin, "value", class_pin_value, 0);
   rb_define_method(class_pin, "value=", class_pin_set_value, 1);
+  rb_define_method(class_pin, "mode", class_pin_mode, 0);
+  rb_define_method(class_pin, "mode=", class_pin_set_mode, 1);
 }
 
 VALUE class_hmc5883l;
