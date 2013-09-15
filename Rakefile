@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rake'
 require 'rake/extensiontask'
+require 'rake/testtask'
 require 'bundler'
 require 'fileutils'
 
@@ -11,3 +12,19 @@ Rake::ExtensionTask.new('bonekit') do |extension|
 end
 
 task :default => :build
+
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts = ["-c", "-f progress"]
+  t.rspec_opts << "-Ilib"
+  t.pattern = 'spec/**/*_spec.rb'
+  t.verbose = true
+end
+
+task :spec => :compile
+
+Rake::TestTask.new('test:unit') do |t|
+  t.libs = ["lib", "test"]
+  t.warning = true
+  t.verbose = true
+  t.test_files = FileList['test/unit/*_test.rb']
+end
