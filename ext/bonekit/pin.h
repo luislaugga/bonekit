@@ -34,7 +34,8 @@ struct pin_s
 
 typedef struct pin_s pin_t;
 
-pin_t * pin_create(unsigned int);
+pin_t * pin_alloc();
+void pin_init(pin_t *, unsigned int);
 void pin_destroy(pin_t *);
 int pin_mode(pin_t *);
 void pin_set_mode(pin_t *, int);

@@ -15,5 +15,6 @@ Gemfile.lock
 vendor
 .bundle
 .gem
+.yardoc
 pkg
 research

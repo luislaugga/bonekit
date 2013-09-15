@@ -1,8 +1,11 @@
-require 'rubygems'
+require 'bundler'
 require 'rake'
 require 'rake/extensiontask'
 require 'rake/testtask'
-require 'bundler'
+require 'rspec/core'
+require 'rspec/core/rake_task'
+require 'yard'
+
 require 'fileutils'
 
 Bundler::GemHelper.install_tasks
@@ -22,9 +25,18 @@ end
 
 task :spec => :compile
 
-Rake::TestTask.new('test:unit') do |t|
+Rake::TestTask.new(:test) do |t|
   t.libs = ["lib", "test"]
   t.warning = true
   t.verbose = true
   t.test_files = FileList['test/unit/*_test.rb']
+end
+
+task :test => :compile
+
+desc 'Generate YARD document'
+YARD::Rake::YardocTask.new(:doc) do |t|
+  t.files   = ['lib/**/*.rb','ext/**/*.c']
+  t.options = ['-o docs/']
+  t.options << '--debug' << '--verbose' if $trace
 end

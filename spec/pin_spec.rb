@@ -35,7 +35,7 @@ describe Pin do
       end
     end
     
-    context "when mode is Output" do
+    context "when default and mode is Output" do
       before(:each) { pin.mode = Output }
       it "returns 0" do
         pin.value.should eq(0)
