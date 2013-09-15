@@ -1,6 +1,6 @@
 require 'bonekit'
 
-switchPin = Pin.new 30, Input
+switchPin = Pin.new 30
 ledPin = Pin.new 31, Output
 
 loop do

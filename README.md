@@ -26,13 +26,29 @@ rake
 gem install --local pkg/bonekit
 ```
 
+## Example
+
+This example turns the LED on when a push button is pressed. The pin _gpio30_ has a 10K pull-up resistor connected to GND. 
+
+```ruby
+require 'bonekit'
+
+switchPin = Pin.new 30
+ledPin = Pin.new 31, Output
+
+loop do
+  ledPin.value = switchPin.value 
+  sleep 0.01
+end
+```
+
 ## Reference
 
 __Pin Input/Output__
 
 ```ruby
-pin = Pin.new 30 # gpio = 30, mode = Input
-pin = Pin.new 30, Output # gpio = 30, mode = Output
+pin = Pin.new 30 # gpio = 30, Input pin by default
+pin = Pin.new 30, Output # Output pin
 
 value = pin.value # Read value
 pin.value = value # Write value
@@ -49,7 +65,7 @@ heading = compass.heading # degrees
 
 ## Roadmap
 
-* Digital Input/Output (in progress, with issues)
+* Digital Input/Output (implemented)
 * Analog Input/Output (planned)
 * Interrupts (planned)
 * Serial Communication (planned)
