@@ -59,11 +59,13 @@ static VALUE class_pin_value(VALUE self)
   return INT2NUM(pin_value(ptr));
 }
 
-static void class_pin_set_value(VALUE self, VALUE value)
+static VALUE class_pin_set_value(VALUE self, VALUE value)
 {
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
   pin_set_value(ptr, NUM2INT(value));
+  
+  return value;
 }
 
 static VALUE class_pin_mode(VALUE self)
@@ -73,11 +75,13 @@ static VALUE class_pin_mode(VALUE self)
   return INT2NUM(pin_mode(ptr));
 }
 
-static void class_pin_set_mode(VALUE self, VALUE value)
+static VALUE class_pin_set_mode(VALUE self, VALUE value)
 {
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
   pin_set_mode(ptr, NUM2INT(value));
+  
+  return value;
 }
 
 void bonekit_class_pin_init()

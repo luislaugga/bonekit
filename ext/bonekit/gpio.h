@@ -36,7 +36,7 @@ extern "C" {
 #define GPIO_DIR "/sys/class/gpio"
 #define GPIO_LEN 64
 
-int gpio_read(unsigned int, const char * , char *);
+int gpio_read(unsigned int, const char * , char *, unsigned int);
 int gpio_write(unsigned int, const char *, char *);
 
 int gpio_export(unsigned int);

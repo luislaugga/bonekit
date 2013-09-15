@@ -28,20 +28,17 @@ limitations under the License.
 #include <unistd.h>
 #include <string.h>
 
-int gpio_read(unsigned int gpio, const char * filename, char * value)
+int gpio_read(unsigned int gpio, const char * filename, char * value, unsigned int length)
 {
   int fd, len;
   char filepath[GPIO_LEN];
   snprintf(filepath, sizeof(filepath), "%s/gpio%d/%s", GPIO_DIR, gpio, filename);
-    
-  if((fd = open(filepath, O_WRONLY)) < 0)
+  
+  if((fd = open(filepath, O_RDONLY | O_NONBLOCK)) < 0)
     return -1;
   
-  if((len = lseek(fd, 0, SEEK_END)) > GPIO_LEN)
-    return -1;
-    
-  fseek (fd, 0, SEEK_SET);
-  read(fd, value, len);
+  lseek(fd, 0, SEEK_SET);
+  read(fd, value, length);
   close(fd);
   
   return 0;
@@ -106,9 +103,10 @@ int gpio_set_direction(unsigned int gpio, unsigned int direction)
 
 int gpio_get_direction(unsigned int gpio, unsigned int * direction)
 {
-  char buffer[GPIO_LEN];
+  const unsigned int length = 3;
+  char buffer[length];
     
-  if(gpio_read(gpio, "direction", buffer) < 0)
+  if(gpio_read(gpio, "direction", buffer, length) < 0)
     return -1;
     
   if(strcmp(buffer, "out") == 0)
@@ -120,8 +118,11 @@ int gpio_get_direction(unsigned int gpio, unsigned int * direction)
 }
 
 int gpio_set_value(unsigned int gpio, unsigned int value)
-{    
-  if(gpio_write(gpio, "value", itoa(value)) < 0)
+{     
+  char buffer[GPIO_LEN];
+  sprintf(buffer, "%d", value); // convert value to string, decimal base
+  
+  if(gpio_write(gpio, "value", buffer) < 0)
     return -1;
     
   return 0;
@@ -129,9 +130,10 @@ int gpio_set_value(unsigned int gpio, unsigned int value)
 
 int gpio_get_value(unsigned int gpio, unsigned int * value)
 {
-  char buffer[GPIO_LEN];
+  const unsigned int length = 2;
+  char buffer[length];
     
-  if(gpio_read(gpio, "value", buffer) < 0)
+  if(gpio_read(gpio, "value", buffer, length) < 0)
     return -1;
     
   *value = atoi(buffer);
