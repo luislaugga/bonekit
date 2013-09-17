@@ -1,6 +1,6 @@
 /*
  
- class_pin.c
+ pin_class.c
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -20,15 +20,15 @@
  
 */
 
-#include "class_pin.h"
+#include "pin_class.h"
 
 #include "ruby.h"
-#include "pin.h"
 #include "gpio.h"
+#include "pin.h"
 
-VALUE class_pin;
+VALUE cBoneKit_Pin;
 
-static void class_pin_free(pin_t * ptr)
+static void Pin_free(pin_t * ptr)
 {
   if(ptr == NULL)
       return;
@@ -36,11 +36,11 @@ static void class_pin_free(pin_t * ptr)
   pin_destroy(ptr);
 }
 
-static VALUE class_pin_alloc(VALUE klass)
+static VALUE Pin_alloc(VALUE class)
 {
     pin_t * ptr = pin_alloc();
   
-    VALUE self = Data_Wrap_Struct(klass, 0, class_pin_free, ptr);
+    VALUE self = Data_Wrap_Struct(class, 0, Pin_free, ptr);
     return self;
 }
 
@@ -52,10 +52,10 @@ static VALUE class_pin_alloc(VALUE klass)
  * @param [Integer] pin the pin number
  * @param [Integer] mode the pin mode to be used (Input or Output)
  */
-static VALUE class_pin_initialize(int argc, VALUE* argv, VALUE self)
+static VALUE Pin_initialize(int argc, VALUE* argv, VALUE self)
 {
   if (argc > 2 || argc == 0)  // there should only be 1 or 2 arguments
-    rb_raise(rb_eArgError, "Wrong number of arguments");
+    rb_raise(rb_eArgError, "wrong number of arguments (%d for 0..1)", argc);
   
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
@@ -78,10 +78,11 @@ static VALUE class_pin_initialize(int argc, VALUE* argv, VALUE self)
  *
  * Reads the value from the pin.
  */
-static VALUE class_pin_value(VALUE self)
+static VALUE Pin_value(VALUE self)
 {
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
+  
   return INT2NUM(pin_value(ptr));
 }
 
@@ -92,7 +93,7 @@ static VALUE class_pin_value(VALUE self)
  * Write the value to the pin. The pin mode must be set to Output.
  * Possible values: High, Low.
  */
-static VALUE class_pin_set_value(VALUE self, VALUE value)
+static VALUE Pin_set_value(VALUE self, VALUE value)
 {
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
@@ -108,7 +109,7 @@ static VALUE class_pin_set_value(VALUE self, VALUE value)
  * Returns the mode of the pin.
  * Possible modes: Input, Output.
  */
-static VALUE class_pin_mode(VALUE self)
+static VALUE Pin_mode(VALUE self)
 {
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
@@ -122,7 +123,7 @@ static VALUE class_pin_mode(VALUE self)
  * Sets the mode of the pin.
  * Possible modes: Input, Output.
  */
-static VALUE class_pin_set_mode(VALUE self, VALUE value)
+static VALUE Pin_set_mode(VALUE self, VALUE value)
 {
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
@@ -131,17 +132,17 @@ static VALUE class_pin_set_mode(VALUE self, VALUE value)
   return value;
 }
 
-void bonekit_class_pin_init()
+void BoneKit_Pin_class_init()
 {
-  class_pin = rb_define_class("Pin", rb_cObject);
+  cBoneKit_Pin = rb_define_class("Pin", rb_cObject);
   
-  rb_define_alloc_func(class_pin, class_pin_alloc);
+  rb_define_alloc_func(cBoneKit_Pin, Pin_alloc);
   
-  rb_define_method(class_pin, "initialize", class_pin_initialize, -1);
-  rb_define_method(class_pin, "value", class_pin_value, 0);
-  rb_define_method(class_pin, "value=", class_pin_set_value, 1);
-  rb_define_method(class_pin, "mode", class_pin_mode, 0);
-  rb_define_method(class_pin, "mode=", class_pin_set_mode, 1);
+  rb_define_method(cBoneKit_Pin, "initialize", Pin_initialize, -1);
+  rb_define_method(cBoneKit_Pin, "value", Pin_value, 0);
+  rb_define_method(cBoneKit_Pin, "value=", Pin_set_value, 1);
+  rb_define_method(cBoneKit_Pin, "mode", Pin_mode, 0);
+  rb_define_method(cBoneKit_Pin, "mode=", Pin_set_mode, 1);
   
   rb_define_global_const("High", INT2NUM(HIGH));
   rb_define_global_const("Low", INT2NUM(LOW));

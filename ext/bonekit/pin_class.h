@@ -1,6 +1,6 @@
 /*
  
- class_hmc5883l.h
+ pin_class.h
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -20,9 +20,11 @@
  
 */
 
-#ifndef BONEKIT_CLASS_HMC5883L_H__
-#define BONEKIT_CLASS_HMC5883L_H__
+#ifndef BONEKIT_PIN_CLASS_H__
+#define BONEKIT_PIN_CLASS_H__
 
-void bonekit_class_hmc5883l_init();
+extern VALUE cBoneKit_Pin;
+
+void BoneKit_Pin_class_init();
 
 #endif

@@ -1,6 +1,6 @@
 /*
  
- class_hmc5883l.c
+ hmc5883l_class.h
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -20,26 +20,29 @@
  
 */
 
-#include "class_hmc5883l.h"
+#include "hmc5883l_class.h"
 
 #include "ruby.h"
 #include "hmc5883l.h"
 
-VALUE class_hmc5883l;
+VALUE cBoneKit_HMC5883L;
 
-static void class_hmc5883l_free(void * ptr)
+static void HMC5883L_free(void * ptr)
 {
+  if(ptr == NULL)
+      return;
+
   hmc5883l_destroy(ptr);
 }
 
-static VALUE class_hmc5883l_new(VALUE class)
+static VALUE HMC5883L_new(VALUE class)
 {
   hmc5883l_t * ptr = hmc5883l_create();
-  VALUE wrap_struct = Data_Wrap_Struct(class, 0, class_hmc5883l_free, ptr);
+  VALUE wrap_struct = Data_Wrap_Struct(class, 0, HMC5883L_free, ptr);
   return wrap_struct;
 }
 
-static VALUE class_hmc5883l_heading(VALUE self)
+static VALUE HMC5883L_heading(VALUE self)
 {
   double value = 0.0f;
   hmc5883l_t * ptr;
@@ -48,9 +51,11 @@ static VALUE class_hmc5883l_heading(VALUE self)
   return rb_float_new(value);
 }
 
-void bonekit_class_hmc5883l_init()
+void Bonekit_HMC5883L_class_init()
 {
-  class_hmc5883l = rb_define_class("HMC5883L", rb_cObject);
-  rb_define_singleton_method(class_hmc5883l, "new", class_hmc5883l_new, 0);
-  rb_define_method(class_hmc5883l, "heading", class_hmc5883l_heading, 0);
+  cBoneKit_HMC5883L = rb_define_class("HMC5883L", rb_cObject);
+  
+  rb_define_singleton_method(cBoneKit_HMC5883L, "new", HMC5883L_new, 0);
+  
+  rb_define_method(cBoneKit_HMC5883L, "heading", HMC5883L_heading, 0);
 }

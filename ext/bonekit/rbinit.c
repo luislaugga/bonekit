@@ -20,14 +20,14 @@
  
 */
 
-#include "class_pin.h"
-#include "class_hmc5883l.h"
+#include "pin_class.h"
+#include "hmc5883l_class.h"
 
 void Init_bonekit(void)
 {
-  // Base
-  bonekit_class_pin_init();
+  // IO
+  Bonekit_Pin_class_init();
   
-  // Devices
-  bonekit_class_hmc5883l_init();
+  // ICs
+  Bonekit_HMC5883L_class_init();
 }
