@@ -26,8 +26,8 @@
 void Init_bonekit(void)
 {
   // IO
-  Bonekit_Pin_class_init();
+  BoneKit_Pin_class_init();
   
   // ICs
-  Bonekit_HMC5883L_class_init();
+  BoneKit_HMC5883L_class_init();
 }

@@ -51,7 +51,7 @@ static VALUE HMC5883L_heading(VALUE self)
   return rb_float_new(value);
 }
 
-void Bonekit_HMC5883L_class_init()
+void BoneKit_HMC5883L_class_init()
 {
   cBoneKit_HMC5883L = rb_define_class("HMC5883L", rb_cObject);
   

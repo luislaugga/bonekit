@@ -23,8 +23,6 @@
 #ifndef BONEKIT_HMC5883L_CLASS_H__
 #define BONEKIT_HMC5883L_CLASS_H__
 
-extern VALUE cBoneKit_HMC5883L;
-
-void Bonekit_HMC5883L_class_init();
+void BoneKit_HMC5883L_class_init();
 
 #endif

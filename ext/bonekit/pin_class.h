@@ -23,8 +23,6 @@
 #ifndef BONEKIT_PIN_CLASS_H__
 #define BONEKIT_PIN_CLASS_H__
 
-extern VALUE cBoneKit_Pin;
-
 void BoneKit_Pin_class_init();
 
 #endif
