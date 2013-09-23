@@ -1,6 +1,6 @@
 require 'bonekit'
 
-pin = Pin.new 31, Output
+pin = Pin.new P9_13, Output
 
 loop do
   pin.value = High

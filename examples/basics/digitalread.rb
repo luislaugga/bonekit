@@ -1,6 +1,6 @@
 require 'bonekit'
 
-pin = Pin.new 30
+pin = Pin.new P9_11
 
 loop do
  value = pin.value

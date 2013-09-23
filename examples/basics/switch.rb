@@ -1,7 +1,7 @@
 require 'bonekit'
 
-switchPin = Pin.new 30
-ledPin = Pin.new 31, Output
+switchPin = Pin.new P9_11
+ledPin = Pin.new P9_13, Output
 
 loop do
   ledPin.value = switchPin.value 
