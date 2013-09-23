@@ -91,9 +91,9 @@ int pin_value(pin_t * obj)
   }
   else if(obj->_ain)
   {
-    float analog_value;
-    adc_get_value(obj->_ain, &analog_value);
-    value = (int)analog_value;
+    int analog_value_raw; // [ADC_MIN_VALUE..ADC_MAX_VALUE]
+    adc_get_value(obj->_ain, &analog_value_raw);
+    value = analog_value_raw > ADC_THRESHOLD ? HIGH : LOW;
   }
   
   return value;

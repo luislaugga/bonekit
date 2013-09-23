@@ -32,11 +32,13 @@
 extern "C" {
 #endif
   
-#define ADC_DIR "/sys/bus/iio/devices/iio\\:device0"
+#define ADC_DIR "/sys/bus/iio/devices/iio:device0"
 #define ADC_LEN 64
   
 #define ADC_MAX_VALUE 4095 // 12 bit ADC
 #define ADC_MIN_VALUE 0
+  
+#define ADC_THRESHOLD 2048 // High, value > threshold
 
 int adc_read(unsigned int, char *, unsigned int);
 int adc_get_value(unsigned int, unsigned int *);
