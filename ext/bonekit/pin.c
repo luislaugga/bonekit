@@ -43,7 +43,7 @@ int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
   {
     int gpio = beaglebone_gpio(beaglebone_global_const);
     
-    if((gpio > 0) == false) // invalid gpio
+    if(!(gpio > 0)) // invalid gpio
       return -1;
     
     obj->_gpio = gpio;
