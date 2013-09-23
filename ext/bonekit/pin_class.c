@@ -83,7 +83,7 @@ static VALUE Pin_initialize(int argc, VALUE* argv, VALUE self)
  * call-seq:
  *  value -> integer
  *
- * Reads the value from the pin.
+ * Reads the value from the pin. The values are [0,1].
  */
 static VALUE Pin_value(VALUE self)
 {
@@ -92,6 +92,22 @@ static VALUE Pin_value(VALUE self)
   
   return INT2NUM(pin_value(ptr));
 }
+
+/*
+ * call-seq:
+ *  analog_value -> float
+ *
+ * Reads the analog value from the pin. The range of values is [0.0..1.0].
+ * NOTE: If the pin doesn't support ADC, analog_value is the floating point equivalent of value.
+ */
+static VALUE Pin_analog_value(VALUE self)
+{
+  pin_t * ptr;
+  Data_Get_Struct(self, pin_t, ptr);
+  
+  return rb_float_new(pin_analog_value(ptr));
+}
+
 
 /*
  * call-seq:
@@ -147,6 +163,7 @@ void BoneKit_Pin_class_init()
   
   rb_define_method(cBoneKit_Pin, "initialize", Pin_initialize, -1);
   rb_define_method(cBoneKit_Pin, "value", Pin_value, 0);
+  rb_define_method(cBoneKit_Pin, "analog_value", Pin_analog_value, 0);
   rb_define_method(cBoneKit_Pin, "value=", Pin_set_value, 1);
   rb_define_method(cBoneKit_Pin, "mode", Pin_mode, 0);
   rb_define_method(cBoneKit_Pin, "mode=", Pin_set_mode, 1);

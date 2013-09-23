@@ -1,11 +1,11 @@
 /*
- 
- pin.h
+
+ adc.c
  BoneKit
- 
+
  Copyright (cc) 2012 Luis Laugga.
  Some rights reserved, all wrongs deserved.
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy of
  this software and associated documentation files (the "Software"), to deal in
  the Software without restriction, including without limitation the rights to
@@ -22,35 +22,42 @@
  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- 
+
 */
 
-#ifndef BONEKIT_PIN_H__
-#define BONEKIT_PIN_H__
+#include "adc.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
 
-struct pin_s
+int adc_read(unsigned int ain, char * value, unsigned int length)
 {
-  unsigned _ain;
-  unsigned _gpio;
-};
-
-typedef struct pin_s pin_t;
-
-pin_t * pin_alloc();
-int pin_init(pin_t *, unsigned int);
-void pin_destroy(pin_t *);
-int pin_mode(pin_t *);
-void pin_set_mode(pin_t *, int);
-int pin_value(pin_t *);
-float pin_analog_value(pin_t *);
-void pin_set_value(pin_t *, int);
-
-#ifdef __cplusplus
+  int fd, len;
+  char filepath[ADC_LEN];
+  snprintf(filepath, sizeof(filepath), "%s/in_voltage%d_raw", ADC_DIR, ain); // ie. /sys/bus/iio/devices/iio\:device0/in_voltage0_raw
+  
+  if((fd = open(filepath, O_RDONLY | O_NONBLOCK)) < 0)
+    return -1;
+  
+  lseek(fd, 0, SEEK_SET);
+  read(fd, value, length);
+  close(fd);
+  
+  return 0;
 }
-#endif
 
-#endif
+int adc_get_value(unsigned int ain, unsigned float * value)
+{
+  const unsigned int length = 2;
+  char buffer[length];
+    
+  if(adc_read(ain, buffer, length) < 0)
+    return -1;
+    
+  *value = atof(buffer);
+    
+  return 0;
+}

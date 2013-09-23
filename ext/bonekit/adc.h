@@ -1,6 +1,6 @@
 /*
  
- pin.h
+ adc.h
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -25,29 +25,18 @@
  
 */
 
-#ifndef BONEKIT_PIN_H__
-#define BONEKIT_PIN_H__
+#ifndef BONEKIT_ADC_H__
+#define BONEKIT_ADC_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+  
+#define ADC_DIR "/sys/bus/iio/devices/iio\:device0"
+#define ADC_LEN 64
 
-struct pin_s
-{
-  unsigned _ain;
-  unsigned _gpio;
-};
-
-typedef struct pin_s pin_t;
-
-pin_t * pin_alloc();
-int pin_init(pin_t *, unsigned int);
-void pin_destroy(pin_t *);
-int pin_mode(pin_t *);
-void pin_set_mode(pin_t *, int);
-int pin_value(pin_t *);
-float pin_analog_value(pin_t *);
-void pin_set_value(pin_t *, int);
+int adc_read(unsigned int, char *, unsigned int);
+int adc_get_value(unsigned int, unsigned int*);
 
 #ifdef __cplusplus
 }

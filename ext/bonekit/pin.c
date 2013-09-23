@@ -26,7 +26,9 @@
 */
 
 #include "pin.h"
+
 #include "gpio.h"
+#include "adc.h"
 
 #include <stdlib.h>
 
@@ -42,12 +44,16 @@ int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
   if(obj)
   {
     int gpio = beaglebone_gpio(beaglebone_global_const);
+    int ain = beaglebone_ain(beaglebone_global_const);
     
-    if(!(gpio > 0)) // invalid gpio
+    if(!(gpio > 0 || ain > 0)) // invalid pin
       return -1;
     
+    obj->_ain = ain;
     obj->_gpio = gpio;
-    gpio_export(gpio);
+    
+    if(gpio)
+      gpio_export(gpio);
   }
   
   return 0;
@@ -55,30 +61,64 @@ int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
 
 void pin_destroy(pin_t * obj)
 {
-  gpio_unexport(obj->_gpio);
+  if(obj->_gpio)
+    gpio_unexport(obj->_gpio);
+  
   free(obj);
 }
 
 int pin_mode(pin_t * obj)
 {
   int mode = -1;
-  gpio_get_direction(obj->_gpio, &mode);
+  if(obj->_gpio)
+    gpio_get_direction(obj->_gpio, &mode);
   return mode;
 }
 
 void pin_set_mode(pin_t * obj, int mode)
 {
-  gpio_set_direction(obj->_gpio, mode);
+  if(obj->_gpio)
+    gpio_set_direction(obj->_gpio, mode);
 }
 
 int pin_value(pin_t * obj)
 {
-  int value;
-  gpio_get_value(obj->_gpio, &value);
+  int value = 0;
+  
+  if(obj->_gpio)
+  {
+    gpio_get_value(obj->_gpio, &value);
+  }
+  else if(obj->_ain)
+  {
+    float analog_value;
+    adc_get_value(obj->_ain, &analog_value);
+    value = (int)analog_value;
+  }
+  
   return value;
+}
+
+float pin_analog_value(pin_t * obj)
+{
+  float analog_value = 0.0;
+  
+  if(obj->_gpio)
+  {
+    int value;
+    gpio_get_value(obj->_gpio, &value);
+    analog_value = (float)value;
+  }
+  else if(obj->_ain)
+  {
+    adc_get_value(obj->_ain, &analog_value);
+  }
+  
+  return analog_value;
 }
 
 void pin_set_value(pin_t * obj, int value)
 {
-  gpio_set_value(obj->_gpio, value);
+  if(obj->_gpio)
+    gpio_set_value(obj->_gpio, value);
 }
