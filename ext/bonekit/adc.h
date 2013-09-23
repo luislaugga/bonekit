@@ -40,6 +40,9 @@ extern "C" {
   
 #define ADC_THRESHOLD 2048 // High, value > threshold
 
+int adc_enabled(); // 1 if adc driver is enabled
+int adc_enable();
+
 int adc_read(unsigned int, char *, unsigned int);
 int adc_get_value(unsigned int, unsigned int *);
 

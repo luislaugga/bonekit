@@ -33,11 +33,40 @@
 #include <unistd.h>
 #include <string.h>
 
+int adc_enabled()
+{
+  int fd;
+  char filepath[ADC_LEN];
+  snprintf(filepath, sizeof(filepath), "%s/name", ADC_DIR);
+  
+  if((fd = open(filepath, O_RDONLY | O_NONBLOCK)) < 0) // driver disabled
+    return 0;
+  
+  close(fd);
+  return 1;
+}
+
+int adc_enable()
+{
+  if(!adc_enabled()) // enable if driver is disabled
+  {
+    int fd;
+    if((fd = open("/sys/devices/bone_capemgr.8/slots", O_WRONLY)) < 0)
+      return -1;
+
+    const char * cape_bone_iio = "cape-bone-iio";
+    write(fd, cape_bone_iio, strlen(cape_bone_iio));
+    close(fd);
+
+    return 0;
+  }
+}
+
 int adc_read(unsigned int ain, char * value, unsigned int length)
 {
   int fd, len;
   char filepath[ADC_LEN];
-  snprintf(filepath, sizeof(filepath), "%s/in_voltage%d_raw", ADC_DIR, ain); // ie. /sys/bus/iio/devices/iio\:device0/in_voltage0_raw
+  snprintf(filepath, sizeof(filepath), "%s/in_voltage%d_raw", ADC_DIR, ain); // ie. /sys/bus/iio/devices/iio:device0/in_voltage0_raw
   
   if((fd = open(filepath, O_RDONLY | O_NONBLOCK)) < 0)
     return -1;

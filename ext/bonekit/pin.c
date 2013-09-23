@@ -59,6 +59,8 @@ int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
     
     if(is_gpio)
       gpio_export(gpio);
+    else if(is_ain)
+      adc_enable();
   }
   
   return 0;
