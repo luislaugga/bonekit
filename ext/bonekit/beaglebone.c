@@ -1,6 +1,6 @@
 /*
  
- pin.c
+ beaglebone.c
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -25,60 +25,19 @@
  
 */
 
-#include "pin.h"
-#include "gpio.h"
+#include "beaglebone.h"
 
-#include <stdlib.h>
-
-pin_t * pin_alloc()
+int beaglebone_gpio(const unsigned int b)
 {
-  pin_t * obj;
-  obj = malloc(sizeof(struct pin_s));  
-  return obj;
+  return (b & 0xff00) >> 8;
 }
 
-int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
+int beaglebone_ain(const unsigned int b)
 {
-  if(obj)
-  {
-    int gpio = beaglebone_gpio(beaglebone_global_const);
-    
-    if((gpio > 0) == false) // invalid gpio
-      return -1;
-    
-    obj->_gpio = gpio;
-    gpio_export(gpio);
-  }
-  
-  return 0;
+  return (b & 0x00f0) >> 4;
 }
 
-void pin_destroy(pin_t * obj)
+int beaglebone_pwm_mux_mode(const unsigned int b)
 {
-  gpio_unexport(obj->_gpio);
-  free(obj);
-}
-
-int pin_mode(pin_t * obj)
-{
-  int mode = -1;
-  gpio_get_direction(obj->_gpio, &mode);
-  return mode;
-}
-
-void pin_set_mode(pin_t * obj, int mode)
-{
-  gpio_set_direction(obj->_gpio, mode);
-}
-
-int pin_value(pin_t * obj)
-{
-  int value;
-  gpio_get_value(obj->_gpio, &value);
-  return value;
-}
-
-void pin_set_value(pin_t * obj, int value)
-{
-  gpio_set_value(obj->_gpio, value);
+  return (b & 0x000f);
 }

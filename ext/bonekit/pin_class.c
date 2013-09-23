@@ -22,6 +22,7 @@
  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
  
 */
 
@@ -65,7 +66,8 @@ static VALUE Pin_initialize(int argc, VALUE* argv, VALUE self)
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
   
-  pin_init(ptr, NUM2UINT(argv[0]));
+  if(pin_init(ptr, NUM2UINT(argv[0])) < 0) // pin must support gpio
+    rb_raise(rb_eArgError, "invalid pin (%d GPIO not supported)", NUM2UINT(argv[0]));
   
   int mode = INPUT;
   

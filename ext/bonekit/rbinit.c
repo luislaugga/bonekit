@@ -25,11 +25,15 @@
  
 */
 
+#include "beaglebone_global_const.h"
 #include "pin_class.h"
 #include "hmc5883l_class.h"
 
 void Init_bonekit(void)
 {
+  // Constants
+  BoneKit_Beaglebone_global_const_init();
+  
   // IO
   BoneKit_Pin_class_init();
   
