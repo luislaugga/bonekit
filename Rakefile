@@ -8,10 +8,12 @@ require 'yard'
 
 require 'fileutils'
 
+spec = Gem::Specification.load('bonekit.gemspec')
+
 Bundler::GemHelper.install_tasks
 
-Rake::ExtensionTask.new('bonekit') do |extension|
-  extension.lib_dir = 'lib/bonekit'
+Rake::ExtensionTask.new('bonekit', spec)
+Gem::PackageTask.new(spec) do |pkg|
 end
 
 task :default => :build
@@ -34,7 +36,6 @@ end
 
 task :test => :compile
 
-desc 'Generate YARD document'
 YARD::Rake::YardocTask.new(:doc) do |t|
   t.files   = ['lib/**/*.rb','ext/**/*.c']
   t.options = ['-o docs/']

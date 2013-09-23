@@ -19,8 +19,6 @@ Gem::Specification.new do |s|
   
   s.require_paths = ["lib"]
   s.extensions    = ["ext/bonekit/extconf.rb"]
-  
-  #s.platform = "arm-linux-eabi"
 
   s.add_development_dependency 'bundler',       '>= 1.0'
   s.add_development_dependency 'rake',          '>= 0.9.0'

@@ -26,3 +26,7 @@
 require 'mkmf'
 
 create_makefile('bonekit/bonekit')
+
+require 'rake/extensiontask'
+
+Rake::ExtensionTask.new('bonekit')
