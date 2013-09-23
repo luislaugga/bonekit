@@ -49,15 +49,15 @@ int adc_read(unsigned int ain, char * value, unsigned int length)
   return 0;
 }
 
-int adc_get_value(unsigned int ain, float * value)
+int adc_get_value(unsigned int ain, unsigned int * value)
 {
-  const unsigned int length = 2;
+  const unsigned int length = 5;
   char buffer[length];
     
   if(adc_read(ain, buffer, length) < 0)
     return -1;
     
-  *value = atof(buffer);
+  *value = atoi(buffer);
     
   return 0;
 }

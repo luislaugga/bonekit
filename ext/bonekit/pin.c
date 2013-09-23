@@ -111,7 +111,9 @@ float pin_analog_value(pin_t * obj)
   }
   else if(obj->_ain)
   {
-    adc_get_value(obj->_ain, &analog_value);
+    int analog_value_raw; // [ADC_MIN_VALUE..ADC_MAX_VALUE]
+    adc_get_value(obj->_ain, &analog_value_raw);
+    analog_value = (float)(((float)analog_value_raw)/((float)ADC_MAX_VALUE));
   }
   
   return analog_value;
