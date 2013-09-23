@@ -28,13 +28,13 @@ gem install --local pkg/bonekit
 
 ## Example
 
-This example turns the LED on when a push button is pressed. The pin _gpio30_ has a 10K pull-up resistor connected to GND. 
+This example turns the LED on when a push button is pressed. The pin _P9-11_ has a 10K pull-up resistor connected to GND. 
 
 ```ruby
 require 'bonekit'
 
-switchPin = Pin.new 30
-ledPin = Pin.new 31, Output
+switchPin = Pin.new P9_11
+ledPin = Pin.new P9_13, Output
 
 loop do
   ledPin.value = switchPin.value 
@@ -44,16 +44,24 @@ end
 
 ## Reference
 
-__Pin Input/Output__
+__Digital Input/Output__
 
 ```ruby
-pin = Pin.new 30 # gpio = 30, Input pin by default
-pin = Pin.new 30, Output # Output pin
+pin = Pin.new P9_11 # Input pin by default
+pin = Pin.new P9_13, Output # Output pin
 
 value = pin.value # Read value
 pin.value = value # Write value
 
 pin.mode = Input # Set mode
+```
+
+__Analog Input__
+
+```ruby
+analog_pin = Pin.new P9_39 # Analog pin AIN0
+
+analog_value = analog_pin.analog_value # Read analog value (0.0 to 1.0)
 ```
 
 __Devices (ICs)__
@@ -66,7 +74,8 @@ heading = compass.heading # degrees
 ## Roadmap
 
 * Digital Input/Output (implemented)
-* Analog Input/Output (planned)
+* Analog Input (implemented)
+* Analog Output (planned)
 * Interrupts (planned)
 * Serial Communication (planned)
 * I2C (planned)

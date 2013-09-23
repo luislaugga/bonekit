@@ -55,8 +55,8 @@ static VALUE Pin_alloc(VALUE class)
  *  initialize(pin, mode=Input) -> Pin
  *
  * Returns a new Pin object with default value of 0
- * @param [Integer] pin the pin number
- * @param [Integer] mode the pin mode to be used (Input or Output)
+ * @param [Integer] pin the beaglebone pin, identified by header (P8 or P9) and number (1-46) (ie. P9_31)
+ * @param [Integer] mode the pin mode to be used (Input or Output) (default is Input)
  */
 static VALUE Pin_initialize(int argc, VALUE* argv, VALUE self)
 {
