@@ -36,7 +36,7 @@ extern "C" {
 #define ADC_LEN 64
 
 int adc_read(unsigned int, char *, unsigned int);
-int adc_get_value(unsigned int, unsigned int*);
+int adc_get_value(unsigned int, float *);
 
 #ifdef __cplusplus
 }
