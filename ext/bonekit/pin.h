@@ -34,7 +34,9 @@ extern "C" {
 
 struct pin_s
 {
+  int _is_ain;
   unsigned _ain;
+  int _is_gpio;
   unsigned _gpio;
 };
 

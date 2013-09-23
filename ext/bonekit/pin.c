@@ -46,13 +46,18 @@ int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
     int gpio = beaglebone_gpio(beaglebone_global_const);
     int ain = beaglebone_ain(beaglebone_global_const);
     
-    if(!(gpio > 0 || ain > 0)) // invalid pin
+    int is_ain = (ain != -1);
+    int is_gpio = (gpio != -1);
+    
+    if(!(is_ain || is_gpio)) // invalid pin
       return -1;
     
     obj->_ain = ain;
+    obj->_is_ain = is_ain;
     obj->_gpio = gpio;
+    obj->_is_gpio = is_gpio;
     
-    if(gpio)
+    if(is_gpio)
       gpio_export(gpio);
   }
   
@@ -61,7 +66,7 @@ int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
 
 void pin_destroy(pin_t * obj)
 {
-  if(obj->_gpio)
+  if(obj->_is_gpio)
     gpio_unexport(obj->_gpio);
   
   free(obj);
@@ -70,14 +75,14 @@ void pin_destroy(pin_t * obj)
 int pin_mode(pin_t * obj)
 {
   int mode = -1;
-  if(obj->_gpio)
+  if(obj->_is_gpio)
     gpio_get_direction(obj->_gpio, &mode);
   return mode;
 }
 
 void pin_set_mode(pin_t * obj, int mode)
 {
-  if(obj->_gpio)
+  if(obj->_is_gpio)
     gpio_set_direction(obj->_gpio, mode);
 }
 
@@ -85,11 +90,11 @@ int pin_value(pin_t * obj)
 {
   int value = 0;
   
-  if(obj->_gpio)
+  if(obj->_is_gpio)
   {
     gpio_get_value(obj->_gpio, &value);
   }
-  else if(obj->_ain)
+  else if(obj->_is_ain)
   {
     int analog_value_raw; // [ADC_MIN_VALUE..ADC_MAX_VALUE]
     adc_get_value(obj->_ain, &analog_value_raw);
@@ -103,13 +108,13 @@ float pin_analog_value(pin_t * obj)
 {
   float analog_value = 0.0;
   
-  if(obj->_gpio)
+  if(obj->_is_gpio)
   {
     int value;
     gpio_get_value(obj->_gpio, &value);
     analog_value = (float)value;
   }
-  else if(obj->_ain)
+  else if(obj->_is_ain)
   {
     int analog_value_raw; // [ADC_MIN_VALUE..ADC_MAX_VALUE]
     adc_get_value(obj->_ain, &analog_value_raw);
@@ -121,6 +126,6 @@ float pin_analog_value(pin_t * obj)
 
 void pin_set_value(pin_t * obj, int value)
 {
-  if(obj->_gpio)
+  if(obj->_is_gpio)
     gpio_set_value(obj->_gpio, value);
 }

@@ -27,17 +27,20 @@
 
 #include "beaglebone.h"
 
-int beaglebone_gpio(const unsigned int b)
+int beaglebone_gpio(const int b)
 {
-  return (b & 0xff00) >> 8;
+  int gpio = (b & 0xff0000) >> 16;
+  return (gpio != 0xff ? gpio : -1);
 }
 
-int beaglebone_ain(const unsigned int b)
+int beaglebone_ain(const int b)
 {
-  return (b & 0x00f0) >> 4;
+  int ain = (b & 0x00ff00) >> 8;
+  return (ain != 0xff ? ain : -1);
 }
 
-int beaglebone_pwm_mux_mode(const unsigned int b)
+int beaglebone_pwm_mux_mode(const int b)
 {
-  return (b & 0x000f);
+  int pwm_mux_mode = (b & 0x0000ff);
+  return (pwm_mux_mode != 0xff ? pwm_mux_mode : -1);
 }
