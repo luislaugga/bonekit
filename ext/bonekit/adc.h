@@ -32,7 +32,7 @@
 extern "C" {
 #endif
   
-#define ADC_DIR "/sys/bus/iio/devices/iio\:device0"
+#define ADC_DIR "/sys/bus/iio/devices/iio\\:device0"
 #define ADC_LEN 64
 
 int adc_read(unsigned int, char *, unsigned int);
