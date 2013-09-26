@@ -32,10 +32,11 @@
 extern "C" {
 #endif
 
-// Global constants
 #define INPUT  0
 #define OUTPUT 1
-#define PWM    2
+
+#define HIGH 1
+#define LOW  0
 
 // Bit mask = GPIO (0-7), AIN (8-15), PWM (16-23)
 #define USR0  0x010035ffff // USR0 { GPIO = 53 }

@@ -31,9 +31,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define HIGH 1
-#define LOW  0
   
 #define GPIO_DIR "/sys/class/gpio"
 #define GPIO_LEN 64

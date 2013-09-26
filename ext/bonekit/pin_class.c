@@ -29,7 +29,8 @@
 #include "pin_class.h"
 
 #include "ruby.h"
-#include "gpio.h"
+
+#include "beaglebone.h"
 #include "pin.h"
 
 VALUE cBoneKit_Pin;
