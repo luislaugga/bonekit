@@ -118,21 +118,21 @@ int pin_value(pin_t * obj)
   return value;
 }
 
-float pin_analog_value(pin_t * obj)
+double pin_analog_value(pin_t * obj)
 {
-  float analog_value = 0.0;
+  double analog_value = 0.0;
   
   if(obj->_is_gpio)
   {
     int value;
     gpio_get_value(obj->_gpio, &value);
-    analog_value = (float)value;
+    analog_value = (double)value;
   }
   else if(obj->_is_ain)
   {
     int analog_value_raw; // [ADC_MIN_VALUE..ADC_MAX_VALUE]
     adc_get_value(obj->_ain, &analog_value_raw);
-    analog_value = (float)(((float)analog_value_raw)/((float)ADC_MAX_VALUE));
+    analog_value = (double)(((double)analog_value_raw)/((double)ADC_MAX_VALUE));
   }
   else if(obj->_pwm_key != NULL)
   {
@@ -155,7 +155,7 @@ void pin_set_analog_value(pin_t * obj, double value)
     if(obj->_pwm_key == NULL)
     {
       char pin_name[5];
-      beaglebone_pin_name(obj->_id, &pin_name); // retrieve pin name ie. P9_42
+      beaglebone_pin_name(obj->_id, (char **)(&pin_name)); // retrieve pin name ie. P9_42
       pwm_export(pin_name, &obj->_pwm_key); // retrieve pin pwm key
     }
     

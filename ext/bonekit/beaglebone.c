@@ -27,6 +27,8 @@
 
 #include "beaglebone.h"
 
+#include <stdio.h>
+
 void beaglebone_pin_name(const int b, char ** pin_name)
 {
   int header = (b & 0xff00000000) >> 32;

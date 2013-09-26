@@ -52,7 +52,7 @@ void pin_destroy(pin_t *);
 int pin_mode(pin_t *);
 void pin_set_mode(pin_t *, int);
 int pin_value(pin_t *);
-float pin_analog_value(pin_t *);
+double pin_analog_value(pin_t *);
 void pin_set_value(pin_t *, int);
 void pin_set_analog_value(pin_t *, double);
 
