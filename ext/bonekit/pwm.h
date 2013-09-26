@@ -1,6 +1,6 @@
 /*
  
- gpio.h
+ pwm.h
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -25,30 +25,40 @@
  
 */
 
-#ifndef BONEKIT_GPIO_H__
-#define BONEKIT_GPIO_H__
+#ifndef BONEKIT_PWM_H__
+#define BONEKIT_PWM_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define HIGH 1
-#define LOW  0
   
-#define GPIO_DIR "/sys/class/gpio"
-#define GPIO_LEN 64
+#define OCP_DIR "/sys/devices/ocp.2"
+#define SLOTS "/sys/devices/bone_capemgr.8/slots"
 
-int gpio_read(unsigned int, const char * , char *, unsigned int);
-int gpio_write(unsigned int, const char *, char *);
+#define PWM_LEN 64
+  
+#define PWM_PERIOD_NS 500000 // nanoseconds
+#define PWM_POLARITY 0 // ...
 
-int gpio_export(unsigned int);
-int gpio_unexport(unsigned int);
+int pwm_enable();
+int pwm_enable_pin(const char *);
 
-int gpio_set_direction(unsigned int, unsigned int);
-int gpio_get_direction(unsigned int, unsigned int*);
+int pwm_get_key(const char *, char **);
 
-int gpio_set_value(unsigned int, unsigned int);
-int gpio_get_value(unsigned int, unsigned int*);
+int pwm_export(const char *, char **);
+int pwm_unexport(char *);
+
+int pwm_read(char *, const char * , char *, unsigned int);
+int pwm_write(char *, const char *, char *);
+
+int pwm_set_polarity(char *, int);
+int pwm_get_polarity(char *, int *);
+
+int pwm_set_period(char *, unsigned long);
+int pwm_get_period(char *, unsigned long *);
+
+int pwm_set_duty_cycle(char *, double);
+int pwm_get_duty_cycle(char *, double *);
 
 #ifdef __cplusplus
 }

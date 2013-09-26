@@ -27,20 +27,28 @@
 
 #include "beaglebone.h"
 
+void beaglebone_pin_name(const int b, char ** pin_name)
+{
+  int header = (b & 0xff00000000) >> 32;
+  int number = (b & 0x00ff000000) >> 24;
+
+  sprintf(*pin_name, "P%d_%d", header, number);
+}
+
 int beaglebone_gpio(const int b)
 {
-  int gpio = (b & 0xff0000) >> 16;
+  int gpio = (b & 0x0000ff0000) >> 16;
   return (gpio != 0xff ? gpio : -1);
 }
 
 int beaglebone_ain(const int b)
 {
-  int ain = (b & 0x00ff00) >> 8;
+  int ain = (b & 0x000000ff00) >> 8;
   return (ain != 0xff ? ain : -1);
 }
 
 int beaglebone_pwm_mux_mode(const int b)
 {
-  int pwm_mux_mode = (b & 0x0000ff);
+  int pwm_mux_mode = (b & 0x00000000ff);
   return (pwm_mux_mode != 0xff ? pwm_mux_mode : -1);
 }

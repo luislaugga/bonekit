@@ -27,8 +27,10 @@
 
 #include "pin.h"
 
+#include "beaglebone.h"
 #include "gpio.h"
 #include "adc.h"
+#include "pwm.h"
 
 #include <stdlib.h>
 
@@ -45,17 +47,24 @@ int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
   {
     int gpio = beaglebone_gpio(beaglebone_global_const);
     int ain = beaglebone_ain(beaglebone_global_const);
+    int pwm_mux_mode = beaglebone_pwm_mux_mode(beaglebone_global_const);
     
     int is_ain = (ain != -1);
     int is_gpio = (gpio != -1);
+    int can_pwm = (pwm_mux_mode != -1);
     
     if(!(is_ain || is_gpio)) // invalid pin
       return -1;
+    
+    obj->_id = beaglebone_global_const;
     
     obj->_ain = ain;
     obj->_is_ain = is_ain;
     obj->_gpio = gpio;
     obj->_is_gpio = is_gpio;
+    
+    obj->_can_pwm = can_pwm; 
+    obj->_pwm_key = NULL; // lazy pwm export (first call to set_analog_value)
     
     if(is_gpio)
       gpio_export(gpio);
@@ -70,6 +79,9 @@ void pin_destroy(pin_t * obj)
 {
   if(obj->_is_gpio)
     gpio_unexport(obj->_gpio);
+  
+  if(obj->_pwm_key != NULL)
+    pwm_unexport(obj->_pwm_key);
   
   free(obj);
 }
@@ -122,7 +134,11 @@ float pin_analog_value(pin_t * obj)
     adc_get_value(obj->_ain, &analog_value_raw);
     analog_value = (float)(((float)analog_value_raw)/((float)ADC_MAX_VALUE));
   }
-  
+  else if(obj->_pwm_key != NULL)
+  {
+    pwm_get_duty_cycle(obj->_pwm_key, &analog_value);
+  }
+    
   return analog_value;
 }
 
@@ -130,4 +146,19 @@ void pin_set_value(pin_t * obj, int value)
 {
   if(obj->_is_gpio)
     gpio_set_value(obj->_gpio, value);
+}
+
+void pin_set_analog_value(pin_t * obj, double value)
+{
+  if(obj->_can_pwm)
+  {
+    if(obj->_pwm_key == NULL)
+    {
+      char pin_name[5];
+      beaglebone_pin_name(obj->_id, &pin_name); // retrieve pin name ie. P9_42
+      pwm_export(pin_name, &obj->_pwm_key); // retrieve pin pwm key
+    }
+    
+    pwm_set_duty_cycle(obj->_pwm_key, value);
+  }
 }

@@ -26,6 +26,7 @@
 */
 
 #include "gpio.h"
+#include "beaglebone.h"
 
 #include <stdio.h>
 #include <stdlib.h>

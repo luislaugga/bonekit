@@ -34,10 +34,14 @@ extern "C" {
 
 struct pin_s
 {
+  unsigned int _id;
+
   int _is_ain;
   unsigned _ain;
   int _is_gpio;
   unsigned _gpio;
+  int _can_pwm;
+  char * _pwm_key;
 };
 
 typedef struct pin_s pin_t;
@@ -50,6 +54,7 @@ void pin_set_mode(pin_t *, int);
 int pin_value(pin_t *);
 float pin_analog_value(pin_t *);
 void pin_set_value(pin_t *, int);
+void pin_set_analog_value(pin_t *, double);
 
 #ifdef __cplusplus
 }

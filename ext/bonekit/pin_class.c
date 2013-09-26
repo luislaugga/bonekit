@@ -66,7 +66,7 @@ static VALUE Pin_initialize(int argc, VALUE* argv, VALUE self)
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
   
-  if(pin_init(ptr, NUM2UINT(argv[0])) < 0) // pin must support gpio
+  if(pin_init(ptr, NUM2UINT(argv[0])) < 0) // pin must support gpio, ain, pwm
     rb_raise(rb_eArgError, "invalid pin (%d GPIO not supported)", NUM2UINT(argv[0]));
   
   int mode = INPUT;
@@ -98,7 +98,9 @@ static VALUE Pin_value(VALUE self)
  *  analog_value -> float
  *
  * Reads the analog value from the pin. The range of values is [0.0..1.0].
- * NOTE: If the pin doesn't support ADC, analog_value is the floating point equivalent of value.
+ * NOTE: 
+ * If the pin doesn't support ADC, analog_value is the floating point equivalent of value.
+ * If the pin has been previously used to set analog values (PWM) its returns the last analog value set.
  */
 static VALUE Pin_analog_value(VALUE self)
 {
@@ -107,7 +109,6 @@ static VALUE Pin_analog_value(VALUE self)
   
   return rb_float_new(pin_analog_value(ptr));
 }
-
 
 /*
  * call-seq:
@@ -121,6 +122,22 @@ static VALUE Pin_set_value(VALUE self, VALUE value)
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
   pin_set_value(ptr, NUM2INT(value));
+  
+  return value;
+}
+
+/*
+ * call-seq:
+ *  analog_value=(value) -> float
+ *
+ * Write the analog value to the pin. The pin must support Pulse-Width Modulation (PWM).
+ * Possible values: 0.0 to 1.0
+ */
+static VALUE Pin_set_analog_value(VALUE self, VALUE value)
+{
+  pin_t * ptr;
+  Data_Get_Struct(self, pin_t, ptr);
+  pin_set_analog_value(ptr, NUM2DBL(value));
   
   return value;
 }
@@ -165,6 +182,7 @@ void BoneKit_Pin_class_init()
   rb_define_method(cBoneKit_Pin, "value", Pin_value, 0);
   rb_define_method(cBoneKit_Pin, "analog_value", Pin_analog_value, 0);
   rb_define_method(cBoneKit_Pin, "value=", Pin_set_value, 1);
+  rb_define_method(cBoneKit_Pin, "analog_value=", Pin_set_analog_value, 1);
   rb_define_method(cBoneKit_Pin, "mode", Pin_mode, 0);
   rb_define_method(cBoneKit_Pin, "mode=", Pin_set_mode, 1);
   
