@@ -52,7 +52,6 @@ digital_value = pin.value # Read digital value (Low or High)
 
 pin.mode = Output # Set mode to Output
 pin.value = High # Write digital value (low or High)
-
 ```
 
 __Analog Input/Output__
@@ -79,15 +78,16 @@ heading = compass.heading # degrees
 * Digital Input/Output (implemented)
 * Analog Input (implemented)
 * Analog Output (implemented)
-* Interrupts (planned)
-* Serial Communication (planned)
 * I2C (planned)
 * SPI (planned)
+* Interrupts (planned)
+* Serial Communication (planned)
 * Devices:
   * HMC5883L (implemented, with issues)
   * ADXL345 (planned)
   * ITG-3200 (planned) 
   * TLC5940 (planned)
+  * TMP102 (planned)
 * Other:
   * Capacitive Sensor (planned)
   * Resistive Pressure Sensor (planned) 
