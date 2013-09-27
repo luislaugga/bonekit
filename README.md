@@ -23,7 +23,7 @@ or build and install:
 ```
 bundle
 rake
-gem install --local pkg/bonekit
+gem install --local pkg/bonekit-0.0.3
 ```
 
 ## Example
@@ -47,21 +47,24 @@ end
 __Digital Input/Output__
 
 ```ruby
-pin = Pin.new P9_11 # Input pin by default
-pin = Pin.new P9_13, Output # Output pin
+pin = Pin.new P9_11 # Input mode pin by default
+digital_value = pin.value # Read digital value (Low or High)
 
-value = pin.value # Read value
-pin.value = value # Write value
+pin.mode = Output # Set mode to Output
+pin.value = High # Write digital value (low or High)
 
-pin.mode = Input # Set mode
 ```
 
-__Analog Input__
+__Analog Input/Output__
 
 ```ruby
-analog_pin = Pin.new P9_39 # Analog pin AIN0
+pin = Pin.new P9_39 # Analog pin
+analog_value = pin.analog_value # Read analog value (0.0 to 1.0)
+```
 
-analog_value = analog_pin.analog_value # Read analog value (0.0 to 1.0)
+```ruby
+pin = Pin.new P9_42 # Pulse-Width Modulation pin
+pin.analog_value = 0.3 # Write analog value (0.0 to 1.0)
 ```
 
 __Devices (ICs)__
@@ -75,7 +78,7 @@ heading = compass.heading # degrees
 
 * Digital Input/Output (implemented)
 * Analog Input (implemented)
-* Analog Output (planned)
+* Analog Output (implemented)
 * Interrupts (planned)
 * Serial Communication (planned)
 * I2C (planned)
