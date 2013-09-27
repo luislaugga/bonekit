@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe Pin do
   
-  let :pin do
-    Pin.new 30
-  end
-  
   describe "mode" do
+    
+    let :pin do
+      Pin.new P9_13
+    end
+    
     context "when default" do
       it "returns Input" do
         pin.mode.should eq(Input)
@@ -29,6 +30,11 @@ describe Pin do
   end
   
   describe "value" do
+    
+    let :pin do
+      Pin.new P9_11
+    end
+    
     context "when default" do
       it "returns 0" do
         pin.value.should eq(0)
@@ -49,6 +55,40 @@ describe Pin do
       }
       it "returns 1" do
         pin.value.should eq(1)
+      end
+    end
+  end
+  
+  describe "analog_value" do
+    
+    let :pin do
+      Pin.new P9_39 # AIN
+    end
+    
+    it "returns value between 0.0 and 1.0" do
+      pin.analog_value.should be >= 0.0
+      pin.analog_value.should be <= 1.0
+    end
+  end
+  
+  describe "analog_value=" do
+    
+    let :pin do
+      Pin.new P9_42 # PWM
+    end
+    
+    context "when default" do
+      it "returns 0.0" do
+        pin.analog_value.should eq(0.0)
+      end
+    end
+    
+    context "when set to 1.0" do
+      before(:each) { 
+        pin.analog_value = 1.0
+      }
+      it "returns 1.0" do
+        pin.analog_value.should eq(1.0)
       end
     end
   end

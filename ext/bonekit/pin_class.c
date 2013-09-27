@@ -67,7 +67,14 @@ static VALUE Pin_initialize(int argc, VALUE* argv, VALUE self)
   pin_t * ptr;
   Data_Get_Struct(self, pin_t, ptr);
   
-  if(pin_init(ptr, NUM2UINT(argv[0])) < 0) // pin must support gpio, ain, pwm
+  if(Beaglebone_global_const_check_type(argv[0]) == 0)
+    rb_raise(rb_eArgError, "wrong pin argument type Fixnum (expected BeaglebonePin)");
+  
+  beaglebone_t * bp_ptr = (beaglebone_t *)Beaglebone_global_const_to_beaglebone_t(argv[0]);
+  beaglebone_t bp;
+  memcpy(&bp, bp_ptr, sizeof(beaglebone_t));
+  
+  if(pin_init(ptr, bp) < 0) // pin must support gpio, ain, pwm
     rb_raise(rb_eArgError, "invalid pin (%d GPIO not supported)", NUM2UINT(argv[0]));
   
   int mode = INPUT;

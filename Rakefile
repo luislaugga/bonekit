@@ -12,7 +12,10 @@ spec = Gem::Specification.load('bonekit.gemspec')
 
 Bundler::GemHelper.install_tasks
 
-Rake::ExtensionTask.new('bonekit', spec)
+Rake::ExtensionTask.new('bonekit', spec) do |ext|
+  ext.lib_dir = 'lib/bonekit'
+end
+
 Gem::PackageTask.new(spec) do |pkg|
 end
 

@@ -28,6 +28,12 @@
 #ifndef BONEKIT_BEAGLEBONE_GLOBAL_CONST_H__
 #define BONEKIT_BEAGLEBONE_GLOBAL_CONST_H__
 
+#include "ruby.h"
+#include "beaglebone.h"
+
+int Beaglebone_global_const_check_type(VALUE);
+beaglebone_t * Beaglebone_global_const_to_beaglebone_t(VALUE);
+
 void BoneKit_Beaglebone_global_const_init();
 
 #endif

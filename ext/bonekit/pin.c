@@ -27,12 +27,12 @@
 
 #include "pin.h"
 
-#include "beaglebone.h"
 #include "gpio.h"
 #include "adc.h"
 #include "pwm.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 pin_t * pin_alloc()
 {
@@ -41,13 +41,13 @@ pin_t * pin_alloc()
   return obj;
 }
 
-int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
+int pin_init(pin_t * obj, beaglebone_t beaglebone_pin)
 {
   if(obj)
   {
-    int gpio = beaglebone_gpio(beaglebone_global_const);
-    int ain = beaglebone_ain(beaglebone_global_const);
-    int pwm_mux_mode = beaglebone_pwm_mux_mode(beaglebone_global_const);
+    int gpio = beaglebone_gpio(beaglebone_pin);
+    int ain = beaglebone_ain(beaglebone_pin);
+    int pwm_mux_mode = beaglebone_pwm_mux_mode(beaglebone_pin);
     
     int is_ain = (ain != -1);
     int is_gpio = (gpio != -1);
@@ -56,7 +56,7 @@ int pin_init(pin_t * obj, unsigned int beaglebone_global_const)
     if(!(is_ain || is_gpio)) // invalid pin
       return -1;
     
-    obj->_id = beaglebone_global_const;
+    memcpy(&(obj->_bp), &beaglebone_pin, sizeof(beaglebone_t));
     
     obj->_ain = ain;
     obj->_is_ain = is_ain;
@@ -104,7 +104,13 @@ int pin_value(pin_t * obj)
 {
   int value = 0;
   
-  if(obj->_is_gpio)
+  if(obj->_pwm_key != NULL)
+  {
+    double analog_value;
+    pwm_get_duty_cycle(obj->_pwm_key, &analog_value);
+    value = (int)analog_value;
+  }
+  else if(obj->_is_gpio)
   {
     gpio_get_value(obj->_gpio, &value);
   }
@@ -121,8 +127,12 @@ int pin_value(pin_t * obj)
 double pin_analog_value(pin_t * obj)
 {
   double analog_value = 0.0;
-  
-  if(obj->_is_gpio)
+
+  if(obj->_pwm_key != NULL)
+  {
+    pwm_get_duty_cycle(obj->_pwm_key, &analog_value);
+  }
+  else if(obj->_is_gpio)
   {
     int value;
     gpio_get_value(obj->_gpio, &value);
@@ -134,17 +144,15 @@ double pin_analog_value(pin_t * obj)
     adc_get_value(obj->_ain, &analog_value_raw);
     analog_value = (double)(((double)analog_value_raw)/((double)ADC_MAX_VALUE));
   }
-  else if(obj->_pwm_key != NULL)
-  {
-    pwm_get_duty_cycle(obj->_pwm_key, &analog_value);
-  }
     
   return analog_value;
 }
 
 void pin_set_value(pin_t * obj, int value)
 {
-  if(obj->_is_gpio)
+  if(obj->_pwm_key != NULL)
+    pwm_set_duty_cycle(obj->_pwm_key, (double)value);
+  else if(obj->_is_gpio)
     gpio_set_value(obj->_gpio, value);
 }
 
@@ -154,11 +162,14 @@ void pin_set_analog_value(pin_t * obj, double value)
   {
     if(obj->_pwm_key == NULL)
     {
-      char pin_name[5];
-      beaglebone_pin_name(obj->_id, (char **)(&pin_name)); // retrieve pin name ie. P9_42
+      char pin_name[PIN_NAME_LEN];
+      beaglebone_pin_name(obj->_bp, pin_name); // retrieve pin name ie. P9_42
       pwm_export(pin_name, &obj->_pwm_key); // retrieve pin pwm key
     }
-    
-    pwm_set_duty_cycle(obj->_pwm_key, value);
   }
+  
+  if(obj->_pwm_key != NULL)
+    pwm_set_duty_cycle(obj->_pwm_key, value);
+  else if(obj->_is_gpio)
+    gpio_set_value(obj->_gpio, (int)value);
 }

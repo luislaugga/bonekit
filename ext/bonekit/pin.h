@@ -31,10 +31,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+  
+#include "beaglebone.h"
 
 struct pin_s
 {
-  unsigned int _id;
+  beaglebone_t _bp;
 
   int _is_ain;
   unsigned _ain;
@@ -47,7 +49,7 @@ struct pin_s
 typedef struct pin_s pin_t;
 
 pin_t * pin_alloc();
-int pin_init(pin_t *, unsigned int);
+int pin_init(pin_t *, beaglebone_t);
 void pin_destroy(pin_t *);
 int pin_mode(pin_t *);
 void pin_set_mode(pin_t *, int);
