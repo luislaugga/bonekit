@@ -13,8 +13,9 @@ xcuserdata
 references
 Gemfile.lock
 vendor
-.bundle
-.gem
-.yardoc
+*.bundle
+*.so
+*.gem
+*.yardoc
 pkg
 research
