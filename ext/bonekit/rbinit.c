@@ -36,6 +36,7 @@ void Init_bonekit(void)
   
   // IO
   BoneKit_Pin_class_init();
+  BoneKit_I2c_class_init();
   
   // ICs
   BoneKit_HMC5883L_class_init();

@@ -52,7 +52,7 @@ struct i2c_s
 
 typedef struct i2c_s i2c_t;
 
-i2c_t * pin_alloc();
+i2c_t * i2c_alloc();
 int i2c_init(i2c_t *, int);
 void i2c_destroy(i2c_t *);
 int i2c_read(i2c_t *, uint8_t *, int);
