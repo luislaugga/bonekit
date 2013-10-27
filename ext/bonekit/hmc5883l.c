@@ -27,61 +27,24 @@
 
 #include "hmc5883l.h"
 
-#define BONEKIT_DEVICE_HMC5883L_Address 0x1E
+#define HMC5883L_Address 0x1e
 
-#define ConfigurationRegisterA 0x00
-#define ConfigurationRegisterB 0x01
+#define HMC5883L_Register_ConfigurationA 0x00
+#define HMC5883L_Register_ConfigurationB 0x01
+#define HMC5883L_Register_Mode           0x02
+#define HMC5883L_Register_DataBegin      0x03
 
-#define ModeRegister 0x02
-#define DataRegisterBegin 0x03
-
-#define Measurement_Continuous 0x00
-#define Measurement_SingleShot 0x01
-#define Measurement_Idle 0x03
+#define HMC5883L_Mode_Measurement_Continuous 0x00
+#define HMC5883L_Mode_Measurement_SingleShot 0x01
+#define HMC5883L_Mode_Measurement_Idle       0x03
 
 #define ErrorCode_1 "Scalenotvalid"//Entered scale was not valid, valid gauss values are: 0.88, 1.3, 1.9, 2.5, 4.0, 4.7, 5.6, 8.1"
 #define ErrorCode_1_Num 1
 
 #include <math.h>
 
-#define M_PI 3.14159265358979323846
-
-// void selectDevice(int fd, int addr, char * name)
-// {
-//   if (ioctl(fd, I2C_SLAVE, addr) < 0)
-//   {
-//     fprintf(stderr, "%s not present\n", name);
-//     exit(1);
-//   }
-// }
-// 
-// void writeToDevice(int fd, int reg, int val)
-// {
-//   char buf[2];
-//   buf[0]=reg;
-//   buf[1]=val;
-//   
-//   if (write(fd, buf, 2) != 2)
-//   {
-//     fprintf(stderr, "Can't write to device\n");
-//   }
-// }
-// 
-// void readFromDevice(int fd, uint8_t * buf, int len)
-// {
-//   int readRegister = 0x03;
-//   if((write(fd, &readRegister, 1)) != 1)
-//   {
-//     //error
-//   }
-//   else
-//   {
-//     if(read(fd, buf, len) != len)
-//     {
-//       //error
-//     }
-//   }
-// }
+#define M_180_div_PI 57.2957795131
+#define M_2PI 6.28318530718
 
 hmc5883l_t * hmc5883l_create()
 {
@@ -89,12 +52,14 @@ hmc5883l_t * hmc5883l_create()
   obj = malloc(sizeof(struct hmc5883l_s));
   if(obj)
   {
-    obj->_scale = 1;
+    //obj->_scale = 1;
     
+    // Initialize
     obj->_i2c = i2c_alloc();
-    i2c_init(obj->_i2c, BONEKIT_DEVICE_HMC5883L_Address);
+    i2c_init(obj->_i2c, HMC5883L_Address);
   
-    uint8_t setup[2] = {ModeRegister, Measurement_Continuous};
+    // Setup mode
+    uint8_t setup[2] = {HMC5883L_Register_Mode, HMC5883L_Mode_Measurement_Continuous};
     i2c_write(obj->_i2c, setup, 2);
   }
   
@@ -112,17 +77,22 @@ void hmc5883l_destroy(hmc5883l_t * obj)
 
 float hmc5883l_heading(hmc5883l_t * obj)
 {
-  uint8_t data[6];
+  uint8_t write_data[1] = {HMC5883L_Register_DataBegin};
+  uint8_t read_data[6];
   
-  uint8_t readRegister = 0x03;
-  i2c_write(obj->_i2c, &readRegister, 1); // check if success before read
-  i2c_read(obj->_i2c, data, 6); // check if success before calculate heading
+  i2c_write(obj->_i2c, write_data, 1); // check if success before read
+  i2c_read(obj->_i2c, read_data, 6); // check if success before calculate heading
     
-  short x = (data[0] << 8) | data[1];
-  short y = (data[4] << 8) | data[5];
-  short z = (data[2] << 8) | data[3];
+  short x = (read_data[0] << 8) | read_data[1];
+  short y = (read_data[4] << 8) | read_data[5];
+  short z = (read_data[2] << 8) | read_data[3];
   
-  float angle = atan2(y, x) * 180 / M_PI;
+  float angle_radians = atan2(y,x);
   
-  return angle;
+  if(angle_radians < 0.0)
+    angle_radians += M_2PI;
+      
+  float angle_degrees = angle_radians * M_180_div_PI;
+  
+  return angle_degrees;
 }

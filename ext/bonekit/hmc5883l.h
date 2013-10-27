@@ -50,7 +50,7 @@ typedef struct
 
 struct hmc5883l_s
 {
-  float _scale;
+  //float _scale;
   float _fd;
   float _buffer[32];
   
