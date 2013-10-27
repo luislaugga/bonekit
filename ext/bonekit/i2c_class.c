@@ -74,6 +74,53 @@ static VALUE I2c_initialize(int argc, VALUE* argv, VALUE self)
   return self;
 }
 
+/*
+ * call-seq:
+ *  read(n) -> Array
+ *
+ * Reads n bytes from the device.
+ */
+static VALUE I2c_read(VALUE self, VALUE nBytes)
+{
+  i2c_t * ptr;
+  Data_Get_Struct(self, i2c_t, ptr);
+  
+  int n = NUM2INT(nBytes);
+  uint8_t * buffer = (uint8_t *)calloc(n, sizeof(uint8_t));
+  i2c_read(ptr, buffer, n);
+  
+  VALUE bytes = rb_ary_new2(n);
+  
+  int i;
+  for(i=0;i<n;++i)
+    rb_ary_push(bytes, INT2FIX(buffer[i]));
+  
+  return bytes;
+}
+
+/*
+ * call-seq:
+ *  write(Array) -> n
+ *
+ * Write the bytes in Array to the device.
+ */
+static VALUE I2c_write(VALUE self, VALUE bytes)
+{
+  i2c_t * ptr;
+  Data_Get_Struct(self, i2c_t, ptr);
+  
+  int n = RARRAY_LEN(bytes);
+  uint8_t * buffer = (uint8_t *)calloc(n, sizeof(uint8_t));
+  
+  int i;
+  for(i=0;i<n;++i)
+    buffer[i] = NUM2INT(rb_ary_entry(bytes, i));
+    
+  VALUE nBytes = INT2FIX(i2c_write(ptr, buffer, n));
+  
+  return nBytes;
+}
+
 void BoneKit_I2c_class_init()
 {
   cBoneKit_I2c = rb_define_class("I2c", rb_cObject);
@@ -81,4 +128,6 @@ void BoneKit_I2c_class_init()
   rb_define_alloc_func(cBoneKit_I2c, I2c_alloc);
   
   rb_define_method(cBoneKit_I2c, "initialize", I2c_initialize, -1);
+  rb_define_method(cBoneKit_I2c, "read", I2c_read, 1);
+  rb_define_method(cBoneKit_I2c, "write", I2c_write, 1);
 }

@@ -23,7 +23,7 @@ or build and install:
 ```
 bundle
 rake
-gem install --local pkg/bonekit-0.0.3
+gem install --local pkg/bonekit-0.0.4.gem
 ```
 
 ## Example
@@ -65,6 +65,13 @@ analog_value = pin.analog_value # Read analog value (0.0 to 1.0)
 pin = Pin.new P9_42 # Pulse-Width Modulation pin
 pin.analog_value = 0.3 # Write analog value (0.0 to 1.0)
 ```
+__I2C__
+
+```ruby
+device = I2c.new address
+device.read(1) # read 1 byte
+device.write([0x03,0x00]) # write 2 bytes
+```
 
 __Devices (ICs)__
 
@@ -78,7 +85,7 @@ heading = compass.heading # degrees
 * Digital Input/Output (implemented)
 * Analog Input (implemented)
 * Analog Output (implemented)
-* I2C (planned)
+* I2C (implemented)
 * SPI (planned)
 * Interrupts (planned)
 * Serial Communication (planned)
