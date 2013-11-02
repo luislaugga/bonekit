@@ -200,3 +200,11 @@ wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
 wpa_cli
 /sbin/udhcpc -iwlan0
 ```
+
+Or add init script:
+
+```
+cp wifi_init.sh /etc/init.d/wifi_init
+chmod 755 /etc/init.d/wifi_init
+update-rc.d wifi_init defaults
+```
