@@ -2,9 +2,45 @@
 
 ## System
 
-```
+```sh
 opkg update
 opkg upgrade
+```
+
+## Generating SSH Keys
+
+Setup 'ssh-agent':
+
+```sh
+echo 'EDITOR=/usr/bin/nano export EDITOR' > ~/.profile
+echo 'eval `ssh-agent -s`' > ~/.profile
+```
+
+Install 'ssh-keygen':
+
+```sh
+opkg install openssh-keygen
+```
+
+```sh
+ssh-keygen -t rsa -C "<your email here>"
+ssh-add ~/.ssh/id_rsa
+```
+
+Edit '~/.ssh/config':
+
+```sh
+Host *
+   IdentityFile ~/.ssh/id_rsa
+```
+
+## Fix Git SSL certificates problem
+
+Edit ~/.gitconfig
+
+```sh
+git config --global http.sslVerify true
+git config --global http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
 ```
 
 ## Time
@@ -15,13 +51,13 @@ http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/
 
 Install ntp:
 
-```shell
+```sh
 opkg install ntp
 ```
 
 Edit '/etc/ntp.conf' file:
 
-```shell
+```sh
 # This is the most basic ntp configuration file
 # The driftfile must remain in a place specific to this
 # machine - it records the machine specific clock error
@@ -46,21 +82,21 @@ restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
 
 Set localtime according to time zone:
 
-```
+```sh
 rm localtime
 ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
 ```
 
 Enable the NTP services:
 
-```
+```sh
 systemctl enable ntpdate.service
 systemctl enable ntpd.service
 ```
 
 Edit '/lib/systemd/system/ntpdate.service':
 
-```
+```sh
 [Unit]
 Description=Network Time Service (one-shot ntpdate mode)
 Before=ntpd.service
@@ -75,24 +111,92 @@ RemainAfterExit=yes
 WantedBy=multi-user.target
 ```
 
-## Ruby
+## Install Ruby
 
 You may need to install ruby. In a beaglebone with angstrom installed do:
 
-```
+```sh
 opkg update
 opkg install ruby
 ```
 
 Fixing /usr/lib/ruby/mkmf.rb:
 
-```
+```sh
 INCFLAGS = -I. #$INCFLAGS -I/usr/include/
 ldflags  = #{$LDFLAGS} -L/lib/
 ```
 
-## Wifi using rtl8192cu chipset
+## Wifi using rtl8192cu/rtl8188cus chipset
 
-...
+How to install a rtl8192cu/rtl8188cus on the Beaglebone Black (BBB) running Angstrom:  
 
+http://www.codealpha.net/864/how-to-set-up-a-rtl8192cu-on-the-beaglebone-black-bbb/
 
+```sh
+opkg install kernel-dev
+opkg install kernel-headers
+```
+
+After reboot:
+
+```sh
+cd /usr/src/kernel
+make scripts
+ln -s /usr/src/kernel /lib/modules/$(uname -r)/build
+cd ~
+git clone https://github.com/cmicali/rtl8192cu_beaglebone.git
+cd rtl8192cu_beaglebone
+make CROSS_COMPILE=""
+```
+
+Install the driver:
+
+```sh
+mv 8192cu.ko /lib/modules/$(uname -r)
+depmod -a
+cd /etc/modules-load.d
+echo "8192cu" > rtl8192cu-vendor.conf
+```
+
+Blacklist old rtlxxxx drivers:
+
+```sh
+cd /etc/modprobe.d
+echo "install rtl8192cu /bin/false" >wifi_blacklist.conf
+echo "install rtl8192c_common /bin/false" >>wifi_blacklist.conf
+echo "install rtlwifi /bin/false" >>wifi_blacklist.conf
+```
+
+Edit '/var/lib/connman/settings':
+
+```sh
+[global]
+Timeservers=0.angstrom.pool.ntp.org;1.angstrom.pool.ntp.org;2.angstrom.pool.ntp.org;3.angstrom.pool.ntp.org
+OfflineMode=false
+
+[Wired]
+Enable=true
+Tethering=false
+
+[WiFi]
+Enable=true
+Tethering=false
+```
+
+Edit '/var/lib/connman/wifi.config':
+
+```sh
+[service_home]
+Type=wifi
+Name="<SSID>"
+```
+
+After reboot, connecting manually:
+
+```sh
+pgrep wpa
+wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf -B
+wpa_cli
+/sbin/udhcpc -iwlan0
+```
