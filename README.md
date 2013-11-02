@@ -26,13 +26,6 @@ rake
 gem install --local pkg/bonekit-0.0.4.gem
 ```
 
-You may need to install ruby. In a beaglebone with angstrom installed do:
-
-```
-opkg update
-opkg install ruby
-```
-
 ## Example
 
 This example turns the LED on when a push button is pressed. The pin _P9-11_ has a 10K pull-up resistor connected to GND. 
