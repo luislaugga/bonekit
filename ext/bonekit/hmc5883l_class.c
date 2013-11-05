@@ -28,7 +28,7 @@
 #include "hmc5883l_class.h"
 
 #include "ruby.h"
-#include "c/bonekit.h"
+#include "bonekit.h"
 
 VALUE cBoneKit_HMC5883L;
 

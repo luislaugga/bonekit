@@ -29,7 +29,7 @@
 #include "i2c_class.h"
 
 #include "ruby.h"
-#include "c/bonekit.h"
+#include "bonekit.h"
 
 VALUE cBoneKit_I2c;
 

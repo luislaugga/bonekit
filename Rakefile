@@ -47,5 +47,6 @@ end
 
 desc "Update bonekit-c dependency"
 task :deps do
-  system("cp -rf deps/bonekit-c/src ext/bonekit/c")
+  system("cp -rf deps/bonekit-c/src/*.h ext/bonekit/")
+  system("cp -rf deps/bonekit-c/src/*.c ext/bonekit/")
 end
