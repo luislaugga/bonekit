@@ -34,14 +34,27 @@ Host *
    IdentityFile ~/.ssh/id_rsa
 ```
 
-## Fix Git SSL certificates problem
+## Fix SSL certificates
 
-Edit ~/.gitconfig
+For git, edit ~/.gitconfig:
 
 ```sh
 git config --global http.sslVerify true
 git config --global http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
 ```
+
+For curl, do:
+
+```sh
+echo "export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt" >> ~/.profile
+```
+
+For rubygem and other, do:
+
+```sh
+echo "export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" >> ~/.profile
+```
+
 
 ## Time
 

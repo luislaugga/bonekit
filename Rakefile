@@ -44,3 +44,8 @@ YARD::Rake::YardocTask.new(:doc) do |t|
   t.options = ['-o docs/']
   t.options << '--debug' << '--verbose' if $trace
 end
+
+desc "Update bonekit-c dependency"
+task :deps do
+  system("cp -rf deps/bonekit-c/src ext/bonekit/c")
+end
