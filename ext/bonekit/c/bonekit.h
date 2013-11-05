@@ -1,6 +1,6 @@
 /*
  
- hmc5883l_class.h
+ bonekit.h
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -25,42 +25,24 @@
  
 */
 
-#include "hmc5883l_class.h"
+#ifndef __BONEKIT_BONEKIT_H__
+#define __BONEKIT_BONEKIT_H__
 
-#include "ruby.h"
-#include "c/bonekit.h"
+#include <signal.h>
+#include <unistd.h>
 
-VALUE cBoneKit_HMC5883L;
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 
-static void HMC5883L_free(void * ptr)
-{
-  if(ptr == NULL)
-      return;
+#include "beaglebone.h"
+#include "gpio.h"
+#include "adc.h"
+#include "pwm.h"
+#include "pin.h"
 
-  hmc5883l_destroy(ptr);
-}
+#include "i2c.h"
+#include "hmc5883l.h"
 
-static VALUE HMC5883L_new(VALUE class)
-{
-  hmc5883l_t * ptr = hmc5883l_create();
-  VALUE wrap_struct = Data_Wrap_Struct(class, 0, HMC5883L_free, ptr);
-  return wrap_struct;
-}
-
-static VALUE HMC5883L_heading(VALUE self)
-{
-  double value = 0.0f;
-  hmc5883l_t * ptr;
-  Data_Get_Struct(self, hmc5883l_t, ptr);
-  value = hmc5883l_heading(ptr);
-  return rb_float_new(value);
-}
-
-void BoneKit_HMC5883L_class_init()
-{
-  cBoneKit_HMC5883L = rb_define_class("HMC5883L", rb_cObject);
-  
-  rb_define_singleton_method(cBoneKit_HMC5883L, "new", HMC5883L_new, 0);
-  
-  rb_define_method(cBoneKit_HMC5883L, "heading", HMC5883L_heading, 0);
-}
+#endif
