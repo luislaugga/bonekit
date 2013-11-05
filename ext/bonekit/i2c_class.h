@@ -25,8 +25,8 @@
  
 */
 
-#ifndef BONEKIT_I2C_CLASS_H__
-#define BONEKIT_I2C_CLASS_H__
+#ifndef __BONEKIT_I2C_CLASS_H__
+#define __BONEKIT_I2C_CLASS_H__
 
 void BoneKit_I2c_class_init();
 

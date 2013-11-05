@@ -25,8 +25,8 @@
  
 */
 
-#ifndef BONEKIT_GPIO_H__
-#define BONEKIT_GPIO_H__
+#ifndef __BONEKIT_GPIO_H__
+#define __BONEKIT_GPIO_H__
 
 #ifdef __cplusplus
 extern "C" {

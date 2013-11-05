@@ -25,8 +25,8 @@
  
 */
 
-#ifndef BONEKIT_I2C_H__
-#define BONEKIT_I2C_H__
+#ifndef __BONEKIT_I2C_H__
+#define __BONEKIT_I2C_H__
 
 #ifdef __cplusplus
 extern "C" {

@@ -25,8 +25,8 @@
  
 */
 
-#ifndef BONEKIT_PWM_H__
-#define BONEKIT_PWM_H__
+#ifndef __BONEKIT_PWM_H__
+#define __BONEKIT_PWM_H__
 
 #ifdef __cplusplus
 extern "C" {

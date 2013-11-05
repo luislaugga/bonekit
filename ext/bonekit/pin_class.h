@@ -25,8 +25,8 @@
  
 */
 
-#ifndef BONEKIT_PIN_CLASS_H__
-#define BONEKIT_PIN_CLASS_H__
+#ifndef __BONEKIT_PIN_CLASS_H__
+#define __BONEKIT_PIN_CLASS_H__
 
 void BoneKit_Pin_class_init();
 

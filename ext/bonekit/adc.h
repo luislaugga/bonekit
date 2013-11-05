@@ -25,8 +25,8 @@
  
 */
 
-#ifndef BONEKIT_ADC_H__
-#define BONEKIT_ADC_H__
+#ifndef __BONEKIT_ADC_H__
+#define __BONEKIT_ADC_H__
 
 #ifdef __cplusplus
 extern "C" {

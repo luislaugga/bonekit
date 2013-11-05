@@ -25,8 +25,8 @@
  
 */
 
-#ifndef BONEKIT_HMC5883L_H__
-#define BONEKIT_HMC5883L_H__
+#ifndef __BONEKIT_HMC5883L_H__
+#define __BONEKIT_HMC5883L_H__
 
 #ifdef __cplusplus
 extern "C" {

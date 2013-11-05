@@ -25,8 +25,8 @@
  
 */
 
-#ifndef BONEKIT_BEAGLEBONE_GLOBAL_CONST_H__
-#define BONEKIT_BEAGLEBONE_GLOBAL_CONST_H__
+#ifndef __BONEKIT_BEAGLEBONE_GLOBAL_CONST_H__
+#define __BONEKIT_BEAGLEBONE_GLOBAL_CONST_H__
 
 #include "ruby.h"
 #include "beaglebone.h"
