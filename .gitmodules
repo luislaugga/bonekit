@@ -1,0 +1,3 @@
+[submodule "deps/bonekit-c"]
+	path = deps/bonekit-c
+	url = https://github.com/laugga/bonekit-c.git
