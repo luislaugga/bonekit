@@ -6,6 +6,7 @@ Makefile
 *.m4
 *.in
 *.in~
+._*
 *.framework
 .deps
 xcuserdata
