@@ -23,7 +23,7 @@ or build and install:
 ```
 bundle
 rake
-gem install --local pkg/bonekit-0.0.4.gem
+gem install --local pkg/bonekit-0.0.5.gem
 ```
 
 ## Example
@@ -99,3 +99,11 @@ heading = compass.heading # degrees
   * Capacitive Sensor (planned)
   * Resistive Pressure Sensor (planned) 
 
+## Development Notes
+
+Build and install native gem:
+
+```
+rake native gem
+gem install --local pkg/bonekit-0.0.5-arm-linux.gem
+```  

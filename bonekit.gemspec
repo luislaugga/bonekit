@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.email    = "dev@laugga.com"
   s.homepage = "http://laugga.com/bonekit"
   
-  s.files      = `git ls-files`.split("\n")
+  s.files      = `git ls-files`.split("\n") - %w(.gitignore deps/bonekit-c)
   s.test_files = `git ls-files -- {test,spec}/*`.split("\n")
   
   s.require_paths = ["lib"]
