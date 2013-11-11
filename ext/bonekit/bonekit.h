@@ -44,5 +44,6 @@
 
 #include "i2c.h"
 #include "hmc5883l.h"
+#include "adxl345.h"
 
 #endif

@@ -1,6 +1,6 @@
 /*
  
- rbinit.c
+ adxl345_class.h
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -25,20 +25,9 @@
  
 */
 
-#include "beaglebone_global_const.h"
-#include "pin_class.h"
-#include "hmc5883l_class.h"
+#ifndef __BONEKIT_ADXL345_CLASS_H__
+#define __BONEKIT_ADXL345_CLASS_H__
 
-void Init_bonekit(void)
-{
-  // Constants
-  BoneKit_Beaglebone_global_const_init();
-  
-  // IO
-  BoneKit_Pin_class_init();
-  BoneKit_I2c_class_init();
-  
-  // ICs
-  BoneKit_HMC5883L_class_init();
-  BoneKit_ADXL345_class_init();
-}
+void BoneKit_ADXL345_class_init();
+
+#endif

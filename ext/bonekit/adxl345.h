@@ -1,6 +1,6 @@
 /*
  
- rbinit.c
+ adxl345.h
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -25,20 +25,43 @@
  
 */
 
-#include "beaglebone_global_const.h"
-#include "pin_class.h"
-#include "hmc5883l_class.h"
+#ifndef __BONEKIT_ADXL345_H__
+#define __BONEKIT_ADXL345_H__
 
-void Init_bonekit(void)
+#ifdef __cplusplus
+extern "C" {
+#endif
+  
+#include "i2c.h"
+
+typedef struct
 {
-  // Constants
-  BoneKit_Beaglebone_global_const_init();
-  
-  // IO
-  BoneKit_Pin_class_init();
-  BoneKit_I2c_class_init();
-  
-  // ICs
-  BoneKit_HMC5883L_class_init();
-  BoneKit_ADXL345_class_init();
+	float x;
+	float y;
+	float z;
+} adxl345_vec3_scaled_t;
+
+typedef struct
+{
+	int x;
+	int y;
+	int z;
+} adxl345_vec3_raw_t;
+
+struct adxl345_s
+{
+  adxl345_vec3_raw_t _raw_acceleration;
+  i2c_t * _i2c;
+};
+
+typedef struct adxl345_s adxl345_t;
+
+adxl345_t * adxl345_create();
+void adxl345_destroy(adxl345_t *);
+adxl345_vec3_raw_t * adxl345_raw_acceleration(adxl345_t * obj);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif

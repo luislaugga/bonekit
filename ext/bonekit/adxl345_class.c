@@ -1,6 +1,6 @@
 /*
  
- hmc5883l_class.h
+ adxl345_class.h
  BoneKit
  
  Copyright (cc) 2012 Luis Laugga.
@@ -25,54 +25,62 @@
  
 */
 
-#include "hmc5883l_class.h"
+#include "adxl345_class.h"
 
 #include "ruby.h"
 #include "bonekit.h"
 
-VALUE cBoneKit_HMC5883L;
+VALUE cBoneKit_ADXL345;
 
-static void HMC5883L_free(void * ptr)
+static void ADXL345_free(void * ptr)
 {
   if(ptr == NULL)
       return;
 
-  hmc5883l_destroy(ptr);
+  adxl345_destroy(ptr);
 }
 
 /*
  * call-seq:
- *  initialize() -> HMC5883L
+ *  initialize() -> ADXL345
  *
- * Returns a new HMC5883L object. 
+ * Returns a new ADXL345 object. 
  */
-static VALUE HMC5883L_new(VALUE class)
+static VALUE ADXL345_new(VALUE class)
 {
-  hmc5883l_t * ptr = hmc5883l_create();
-  VALUE wrap_struct = Data_Wrap_Struct(class, 0, HMC5883L_free, ptr);
+  adxl345_t * ptr = adxl345_create();
+  VALUE wrap_struct = Data_Wrap_Struct(class, 0, ADXL345_free, ptr);
   return wrap_struct;
 }
 
 /*
  * call-seq:
- *  heading() -> Float
+ *  raw_acceleration() -> Array
  *
- * Returns a Float with the heading value in degrees ([-180,180]). 
+ * Returns an Array with the raw acceleration values ([x,y,z]). 
+ * The ADXL345 is pre-configured for measuring values in the +/-4g range.
  */
-static VALUE HMC5883L_heading(VALUE self)
+static VALUE ADXL345_raw_acceleration(VALUE self)
 {
-  double value = 0.0f;
-  hmc5883l_t * ptr;
-  Data_Get_Struct(self, hmc5883l_t, ptr);
-  value = hmc5883l_heading(ptr);
-  return rb_float_new(value);
+  adxl345_t * ptr;
+  Data_Get_Struct(self, adxl345_t, ptr);
+  
+  adxl345_vec3_raw_t * raw_acceleration = adxl345_raw_acceleration(ptr);
+  
+  VALUE value = rb_ary_new2(3);
+  
+  rb_ary_push(value, INT2FIX(raw_acceleration->x));
+  rb_ary_push(value, INT2FIX(raw_acceleration->y));
+  rb_ary_push(value, INT2FIX(raw_acceleration->z));
+  
+  return value;
 }
 
-void BoneKit_HMC5883L_class_init()
+void BoneKit_ADXL345_class_init()
 {
-  cBoneKit_HMC5883L = rb_define_class("HMC5883L", rb_cObject);
+  cBoneKit_ADXL345 = rb_define_class("ADXL345", rb_cObject);
   
-  rb_define_singleton_method(cBoneKit_HMC5883L, "new", HMC5883L_new, 0);
+  rb_define_singleton_method(cBoneKit_ADXL345, "new", ADXL345_new, 0);
   
-  rb_define_method(cBoneKit_HMC5883L, "heading", HMC5883L_heading, 0);
+  rb_define_method(cBoneKit_ADXL345, "raw_acceleration", ADXL345_raw_acceleration, 0);
 }
