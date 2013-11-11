@@ -80,6 +80,11 @@ compass = HMC5883L.new
 heading = compass.heading # degrees
 ```
 
+```ruby
+accelerometer = ADXL345.new
+raw_acceleration = compass.raw_acceleration # [x,y,z]
+```
+
 ## Roadmap
 
 * Digital Input/Output (implemented)
@@ -90,8 +95,8 @@ heading = compass.heading # degrees
 * Interrupts (planned)
 * Serial Communication (planned)
 * Devices:
-  * HMC5883L (implemented, with issues)
-  * ADXL345 (planned)
+  * HMC5883L (support for heading in degrees)
+  * ADXL345 (support for raw acceleration)
   * ITG-3200 (planned) 
   * TLC5940 (planned)
   * TMP102 (planned)
