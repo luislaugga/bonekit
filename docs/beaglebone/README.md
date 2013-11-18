@@ -221,3 +221,12 @@ cp wifi_init.sh /etc/init.d/wifi_init
 chmod 755 /etc/init.d/wifi_init
 update-rc.d wifi_init defaults
 ```
+
+## Turn user LEDs off
+
+```sh
+echo 0 > /sys/class/leds/beaglebone\:green\:usr0/brightness # Off
+echo 0 > /sys/class/leds/beaglebone\:green\:usr1/brightness # Off
+echo 0 > /sys/class/leds/beaglebone\:green\:usr2/brightness # Off
+echo 0 > /sys/class/leds/beaglebone\:green\:usr3/brightness # Off
+```

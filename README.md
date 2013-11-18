@@ -94,8 +94,7 @@ heading = compass.heading # degrees
   * ADXL345 (planned)
   * ITG-3200 (planned) 
   * TLC5940 (planned)
-  * TMP102 (planned)
-* Other:
+* Libraries:
   * Capacitive Sensor (planned)
   * Resistive Pressure Sensor (planned) 
 
