@@ -1,8 +1,8 @@
 # BoneKit
 
-_BoneKit is a physical interface toolkit for the BeagleBone._
+_BoneKit is a physical computing toolkit for the BeagleBone._
 
-BoneKit is a ruby library that facilitates the creation of physical interaction experiments using the BeagleBone. It gives access to low-level hardware features (PWM, SPI, I2C, ADC) and includes support for some ICs (TLC5940, ADLX335, HMC5883L).
+BoneKit is a library for the beaglebone that provides easy access from ruby to low-level hardware features. It supports Digital Input/Output (GPIO), Analog Input (ADC), Pulse-Width Modulation (PWM) and I²C.
 
 ## Getting Started
 
@@ -91,7 +91,7 @@ heading = compass.heading # degrees
 * Serial Communication (planned)
 * Devices:
   * HMC5883L (implemented, with issues)
-  * ADXL345 (planned)
+  * ADXL345 (read acceleration values, wip)
   * ITG-3200 (planned) 
   * TLC5940 (planned)
 * Libraries:

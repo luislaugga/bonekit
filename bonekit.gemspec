@@ -5,13 +5,13 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = "bonekit"
   s.version     = BoneKit::VERSION
-  s.summary     = "Physical interaction toolkit for the beaglebone."
-  s.description = %q{BoneKit is a hardware interface toolkit for the beaglebone. It enables access from ruby to hardware features such as: Digital I/O, Interrupts, ADC, PWM, I2C and SPI.}
+  s.summary     = "Physical computing toolkit for the beaglebone."
+  s.description = %q{BoneKit is a physical computing library for the beaglebone. It provides easy access from ruby to hardware features such as: Digital I/O, Analog Read, Pulse-Width Modulation and I2C.}
   
   s.license = 'MIT'
   
   s.author   = "Luis Laugga"
-  s.email    = "dev@laugga.com"
+  s.email    = "luis@laugga.com"
   s.homepage = "http://laugga.com/bonekit"
   
   s.files      = `git ls-files`.split("\n") - %w(.gitignore deps/bonekit-c)
